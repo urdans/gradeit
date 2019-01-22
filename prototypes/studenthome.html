@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Document</title>
+	<script src="studenthome.js"></script>
+</head>
+<body>
+    <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
+        <a class="nav-link active" onclick="clearActive(event)" href="#">Dash board</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#">Profile</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
+      </nav>
+
+	  <h3>Jose Urdaneta</h3>
+    <div class="container">
+        <h1>Dash board</h1>
+        <table>
+            <tr>
+				<th hidden></th>
+                <th>Subject</th>
+                <th>Last eval. date</th>
+                <th>Description</th>
+                <th>%</th>
+                <th>Grade</th>
+                <th>Cumulative</th>
+            </tr>
+            <tr class="nav-pills">
+				<!-- <td hidden>123</td> -->
+                <td><a id="d1" data-subjectid="123" class="nav-link active" onclick="selectSubject(event)" href="#">Literature</a></td>
+                <td>01/19/2019</td>
+                <td>Assignment</td>
+                <td>30%</td>
+                <td>100</td>
+                <td>30.00</td>
+            </tr>
+            <tr class="nav-pills">
+				<!-- <td hidden>556</td> -->
+                <td><a id="d2" data-subjectid="556" class="nav-link" onclick="selectSubject(event)" href="#">Science</a></td>
+                <td>01/15/2019</td>
+                <td>Assignment</td>
+                <td>30%</td>
+                <td>90</td>
+                <td>27.00</td>
+            </tr>
+            <tr class="nav-pills">
+				<!-- <td hidden>526</td> -->
+                <td><a id="d3" data-subjectid="399" class="nav-link" onclick="selectSubject(event)" href="#">Math</a></td>
+                <td>01/15/2019</td>
+                <td>Test</td>
+                <td>35%</td>
+                <td>95</td>
+                <td>33.25</td>
+            </tr>
+        </table> 
+    </div>
+	<hr>
+    <div class="container">
+        <h5>Literature evaluation plan</h4>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>%</th>
+                <th>Grade</th>
+            </tr>
+            <tr>
+                <td>01/05/2019</td>
+                <td>Assignment</td>
+                <td>30%</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>01/12/2019</td>
+                <td>Assignment</td>
+                <td>30%</td>
+                <td>98</td>
+            </tr>
+            <tr>
+                <td>01/19/2019</td>
+                <td>Test</td>
+                <td>30%</td>
+                <td>95</td>
+            </tr>
+            <tr>
+                <td>01/25/2019</td>
+                <td>Participation</td>
+                <td>10%</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>100%</td>
+                <td>98.75</td>
+            </tr>
+        </table>
+    </div>
+	
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>
