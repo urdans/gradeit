@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping(value="")
 public class StudentController {
-    @RequestMapping(value = "student", method = RequestMethod.GET)
+    @RequestMapping(value = "Student", method = RequestMethod.GET)
     public String logIn(){
         return "studenthome";
     }

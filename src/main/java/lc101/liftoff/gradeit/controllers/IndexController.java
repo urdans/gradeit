@@ -1,8 +1,12 @@
 package lc101.liftoff.gradeit.controllers;
 
+import lc101.liftoff.gradeit.tools.UserSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,49 +15,41 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping(value="")
 public class IndexController {
-//will admin logging, registration and registration confirmation
+    @Autowired
+    UserSession userSession;
+
     private HttpSession session;
+
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String logIn(HttpServletRequest request){
-        //is the user is logged in, redirect to /student, /teacher or /registrar url
-        //otherwise, render the log in page
-        session = request.getSession(false);
-
-        if(userIsStudent()){
-            return "redirect:/student";
+        /* if the session contains info about a logged user, redirect to /Student, /teacher or /registrar
+         accordingly, otherwise render the log in page */
+        if(userSession.decodeSession(request)){
+            if(userSession.isStudent())
+                return "redirect:/Student";
+            if(userSession.isTeacher())
+                return "redirect:/teacher";
+            if(userSession.isRegistrar())
+                return "redirect:/registrar";
         }
-
-        if(userIsTeacher()){
-            return "redirect:/teacher";
-        }
-
-        if(userIsRegistrar()){
-            return "redirect:/registrar";
-        }
-
         return "login";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String logInDone(HttpServletRequest request){
-        //check the user type. Remember the user has logged in and redirect accordingly
-        //If wrong user show error message
-        session = request.getSession(true);
-        session.setAttribute("uname","urdans");
-        if(userIsStudent()){
-            return "redirect:student";
+    public String logInDone(Model model, HttpServletRequest request, @RequestParam String username, @RequestParam String password){
+        /* check if the combination user/password exist in any of the user tables and
+        creates the session accordingly, otherwise show error message */
+        if(userSession.decodeSession(request, username, password)){
+            if(userSession.isStudent())
+                return "redirect:/Student";
+            if(userSession.isTeacher())
+                return "redirect:/teacher";
+            if(userSession.isRegistrar())
+                return "redirect:/registrar";
         }
-
-        if(userIsTeacher()){
-            return "redirect:teacher";
-        }
-
-        if(userIsRegistrar()){
-            return "redirect:registrar";
-        }
-
-        return "redirect:";
+        model.addAttribute("errormsg", "Ivalid combination user/password. Please try again");
+        return "login";
     }
 
 
@@ -79,24 +75,5 @@ public class IndexController {
             return "registrationconfirmed";
         }
         return "redirect:register";
-    }
-
-    public boolean userIsLogged(){
-        return false;
-    }
-
-    public boolean userIsStudent(){
-        if(session==null) return false;
-        String user = (String)session.getAttribute("uname");
-        return user.equals("urdans");
-//        return false;
-    }
-
-    public boolean userIsTeacher(){
-        return false;
-    }
-
-    public boolean userIsRegistrar(){
-        return false;
     }
 }

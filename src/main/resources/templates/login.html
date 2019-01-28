@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +11,12 @@
     <div>
         <h3>Log in</h3>
         <form method="post">
-            User name: <input type="text" name="user"><br>
+            User name: <input type="text" name="username"><br>
             Password: <input type="password" name="password"><br>
             <input type="submit" value="Submit">
         </form>
+        <span th:text="${errormsg}" th:class="Error">Default error message</span>
+        <hr>
         <span>Don't have an account?</span>
         <span>Register <a href="\register">here</a></span>
     </div>
