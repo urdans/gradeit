@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
+    <title>Document</title>
+
+    <!-- <link rel="stylesheet" th:href="@{/css/styles.css}"/> -->
+    <!-- <script type="text/javascript" th:src="@{/js/studenthome.js}"></script> -->
+
+</head>
+<body>
+    <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
+<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Students</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Teachers</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Subjects</a>
+		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Groups</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#">Mr. Registrone</a>
+        <div>
+            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
+        </div>        
+    </nav>
+    <div>
+        <h1>Teacher List</h1>
+    </div>
+    <div>
+        <table>
+            <tr>
+			    <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            <tr>
+				<td>John</td>
+                <td>Mac Kinder</td>
+                <td>jmackk@gmail.com</td>
+                <td><a href="#">View/Edit</a></td>
+            </tr>
+            <tr>
+				<td>Carl</td>
+                <td>Pen</td>
+                <td>carlpen@aol.com</td>
+                <td><a href="#">View/Edit</a></td>
+            </tr>
+            <tr>
+				<td>Joseph</td>
+                <td>Smith</td>
+                <td>jpen1008@yahoo.com</td>
+                <td><a href="#">View/Edit</a></td>
+            </tr>
+            <tr>
+				<td><a href="#">Add</a></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>			
+        </table> 
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

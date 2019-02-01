@@ -1,5 +1,6 @@
 package lc101.liftoff.gradeit.controllers;
 
+
 import lc101.liftoff.gradeit.tools.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,21 +9,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 @Controller
-@RequestMapping(value="student")
-public class StudentController {
+@RequestMapping("registrar")
+public class RegistrarController {
     @Autowired
     UserSession userSession;
 
-    @RequestMapping(value = "grades", method = RequestMethod.GET)
-    public String studentGrades(HttpServletRequest request){
-        if(!studentLoggedIn(request)){
+    @RequestMapping(value = "students", method = RequestMethod.GET)
+    public String registrarStudent(HttpServletRequest request){
+        if(!registrarLoggedIn(request)){
             return "redirect:/";
         }
-        return "studentgrades";
+        return "registrarstudents";
     }
 
-    public boolean studentLoggedIn(HttpServletRequest request){
-        return (userSession.decodeSession(request)) & (userSession.isStudent());
+    public boolean registrarLoggedIn(HttpServletRequest request){
+        return (userSession.decodeSession(request)) & (userSession.isRegistrar());
     }
 }

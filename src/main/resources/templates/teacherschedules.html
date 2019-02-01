@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
+    <title>Document</title>
+
+    <!-- <link rel="stylesheet" th:href="@{/css/styles.css}"/> -->
+    <!-- <script type="text/javascript" th:src="@{/js/studenthome.js}"></script> -->
+
+</head>
+<body>
+    <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
+<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Roster</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Schedules</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#">Tadeo Jones</a>
+        <div>
+            <a class="nav-link" onclick="clearActive(event)" href="#">Profile</a>
+            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
+        </div>        
+    </nav>
+    <div>
+        <h1>Math Evalueation Plan</h1>
+    </div>
+    <div>
+        Showing:
+		<select>
+			<option value="subject_id">Math</option>
+			<option value="subject_id">Science</option>
+			<option value="subject_id">Literature</option>
+			<option value="subject_id">Biology</option>
+		</select>
+    </div>
+    <div>
+        <table>
+            <tr>
+			    <th>Description</th>
+                <th>Date</th>
+                <th>%</th>
+            </tr>
+            <tr>
+				<td>Test</td>
+                <td>12/15/2018</td>
+                <td>30%</td>
+				<td><a href="#">Edit</td>
+            </tr>
+            <tr>
+				<td>Test</td>
+                <td>01/25/2019</td>
+                <td>30%</td>
+				<td><a href="#">Edit</td>
+            </tr>
+            <tr>
+				<td>Test</td>
+                <td>02/15/2019</td>
+                <td>30%</td>
+				<td><a href="#">Edit</td>
+            </tr>
+            <tr>
+				<td>Assignment</td>
+                <td>02/28/2019</td>
+                <td>10%</td>
+				<td><a href="#">Edit</td>
+            </tr>
+            <tr>
+				<td><a href="#">Add</td>
+                <td>Total:</td>
+                <td>100%</td>
+            </tr>
+		</table>
+    </div>
+	<div>
+		<div>
+			<h3>Editing the evaluation plan</h3>
+		</div>
+		<form method="post">
+            Description: <input type="text" name="email"><br>
+            Date: <input type="text" name="username"><br>
+            Percentage: <input type="password" name="password1"><br>
+        </form>		
+		<div>
+			<button>Submit</button>
+			<button>Cancel</button>
+			<button>Delete</button>
+		</div>	
+	</div>
+    
+	
+	<div>
+		<span th:text="${errormsg}" th:class="Error">Default error message</span>
+	</div>
+	
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

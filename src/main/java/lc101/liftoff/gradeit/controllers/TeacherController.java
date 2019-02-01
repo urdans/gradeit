@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping(value="student")
-public class StudentController {
+@RequestMapping(value="teacher")
+public class TeacherController {
     @Autowired
     UserSession userSession;
 
-    @RequestMapping(value = "grades", method = RequestMethod.GET)
-    public String studentGrades(HttpServletRequest request){
-        if(!studentLoggedIn(request)){
+    @RequestMapping(value = "roster", method = RequestMethod.GET)
+    public String teacherRosterlogIn(HttpServletRequest request){
+        if(!teacherLoggedIn(request)){
             return "redirect:/";
         }
-        return "studentgrades";
+        return "teacherroster";
     }
 
-    public boolean studentLoggedIn(HttpServletRequest request){
-        return (userSession.decodeSession(request)) & (userSession.isStudent());
+    public boolean teacherLoggedIn(HttpServletRequest request){
+        return (userSession.decodeSession(request)) & (userSession.isTeacher());
     }
 }

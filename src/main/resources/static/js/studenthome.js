@@ -35,11 +35,11 @@ function selectSubject(e){
 	for(i=1;i<15;i++){
 		var el = document.getElementById("d"+i);
 		if(el==null) break;
-		el.setAttribute("class","nav-link");
+		el.setAttribute("class","btn btn-link nav-link");
 	} 
 	
 	//sets active value
-	e.target.setAttribute("class","nav-link active");
+	e.target.setAttribute("class","btn btn-link nav-link active");
 	var subjectid=e.target.getAttribute("data-subjectid");
 	console.log(subjectid);
 	//usar ajax para pedir los datos de evaluacion del alumno usando el subjectid (no es el mejor nombre).

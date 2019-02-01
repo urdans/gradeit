@@ -1,12 +1,11 @@
 package lc101.liftoff.gradeit.tools;
 
-import lc101.liftoff.gradeit.models.Registrar;
-import lc101.liftoff.gradeit.models.Student;
-import lc101.liftoff.gradeit.models.Teacher;
+import lc101.liftoff.gradeit.models.*;
 import lc101.liftoff.gradeit.models.data.RegistrarDao;
 import lc101.liftoff.gradeit.models.data.StudentDao;
 import lc101.liftoff.gradeit.models.data.TeacherDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +19,6 @@ public class UserSession {
     private TeacherDao teacherDao;
     @Autowired
     private RegistrarDao registrarDao;
-
-    public static enum UserType{
-        STUDENT, TEACHER, REGISTRAR
-    }
 
     private UserType userType;
     private int userId;
@@ -61,6 +56,11 @@ public class UserSession {
                 return false;
 
             //checking if the user id exists in the corresponding table
+            /*New refactored code @1*/
+            return userExistById(studentDao, id) || userExistById(teacherDao, id) || userExistById(registrarDao, id);
+
+
+            /* code under refactoring @1
             if(userType==UserType.STUDENT){
                 return studentDao.existsById(id);
             }
@@ -69,48 +69,85 @@ public class UserSession {
             }
             if(userType==UserType.REGISTRAR){
                 return registrarDao.existsById(id);
-            }
+            }*/
         }
         catch (Exception e) {
             return false;
         }
-        return false;
+//        return false; //@1
     }
 
     public boolean decodeSession(HttpServletRequest aRequest, String userName, String password){
         request = aRequest;
         if(userName.equals("") | password.equals(""))
             return false;
-        /*
-        TODO: encode password here
-        */
-
         //the user must exist only once in all the three user tables together
-        for(Student std: studentDao.findAll()){
-            if(std.getUserName().equals(userName) & std.getPassword().equals(password)){
-                userType = UserType.STUDENT;
-                userId =  std.getId();
-                createSession();
-                return true;
-            }
+//        for(Student std: studentDao.findAll()){ /*done refactor using User interface semantics*/
+//            String un = std.getUserName();
+//            String psw = std.getPassword();
+//            if(un == null || psw == null) continue;
+//            String salt = HashTools.extractSalt(psw);
+//            String providedSaltedPassword = HashTools.hashAndSaltPassword(salt, password);
+//            if(un.equals(userName) & psw.equals(providedSaltedPassword)){
+//                userType = UserType.STUDENT;
+//                userId =  std.getId();
+//                createSession();
+//                return true;
+//            }
+//        }
+
+
+        if(validateUser(studentDao, userName, password)) {
+            userType = UserType.STUDENT;
+            createSession();
+            return true;
         }
-        for(Teacher tch: teacherDao.findAll()){
-            if(tch.getUserName().equals(userName) & tch.getPassword().equals(password)){
-                userType = UserType.TEACHER;
-                userId =  tch.getId();
-                createSession();
-                return true;
-            }
+        if(validateUser(teacherDao, userName, password)) {
+            userType = UserType.TEACHER;
+            createSession();
+            return true;
         }
-        for(Registrar rgt: registrarDao.findAll()){
-            if(rgt.getUserName().equals(userName) & rgt.getPassword().equals(password)){
-                userType = UserType.REGISTRAR;
-                userId =  rgt.getId();
-                createSession();
-                return true;
-            }
+        if(validateUser(registrarDao, userName, password)) {
+            userType = UserType.REGISTRAR;
+            createSession();
+            return true;
         }
+
+//        for(Teacher tch: teacherDao.findAll()){
+//            String un = tch.getUserName();
+//            String psw = tch.getPassword();
+//            if(un == null || psw == null) continue;
+//            String salt = HashTools.extractSalt(psw);
+//            String providedSaltedPassword = HashTools.hashAndSaltPassword(salt, password);
+//            if(un.equals(userName) & psw.equals(providedSaltedPassword)){
+//                userType = UserType.TEACHER;
+//                userId =  tch.getId();
+//                createSession();
+//                return true;
+//            }
+//        }
+//        for(Registrar rgt: registrarDao.findAll()){
+//            String un = rgt.getUserName();
+//            String psw = rgt.getPassword();
+//            if(un == null || psw == null) continue;
+//            String salt = HashTools.extractSalt(psw);
+//            String providedSaltedPassword = HashTools.hashAndSaltPassword(salt, password);
+//            if(un.equals(userName) & psw.equals(providedSaltedPassword)){
+//                userType = UserType.REGISTRAR;
+//                userId =  rgt.getId();
+//                createSession();
+//                return true;
+//            }
+//        }
         return false;
+    }
+
+    public void endSession(HttpServletRequest aRequest){
+        request = aRequest;
+        session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
     }
 
     private void createSession(){
@@ -137,5 +174,24 @@ public class UserSession {
 
     public int getUserId() {
         return userId;
+    }
+
+    private boolean userExistById(CrudRepository userDao, int id) {
+        return userDao.existsById(id);
+    }
+
+    private boolean validateUser(CrudRepository<? extends User, Integer> userDao, String uName, String uPwd) {
+        for(User usr: userDao.findAll()){
+            String un = usr.getUserName();
+            String psw = usr.getPassword();
+            if(un == null || psw == null) continue;
+            String salt = HashTools.extractSalt(psw);
+            String providedSaltedPassword = HashTools.hashAndSaltPassword(salt, uPwd);
+            if(un.equals(uName) & psw.equals(providedSaltedPassword)){
+                userId = usr.getId();
+                return true;
+            }
+        }
+        return false;
     }
 }

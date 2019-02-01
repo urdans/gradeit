@@ -1,0 +1,241 @@
+SPRING BOOT
+- To use @Autowired in SpringBoot, it must be used inside a component @Component. The autowired object cannot be created
+  by the user; We just need to let SpringBoot to create (inject) that object for us.
+  
+HIBERNATE
+- Always use @ManyToOne BIDIRECTIONAL mapping. It's more efficient and provides more flexibilty by allowing acces to the data from both related tables.
+
+***********************************
+BOOSTRAP
+
+-After <body>, use a fluid container <div class="container-fluid"> for responsiveness. Use grid like:
+  <div class="row">
+    <div class="col-sm-4" >.col-sm-4</div>
+    <div class="col-sm-8" >.col-sm-8</div>
+  </div>
+  The numbers must add up to 12, in this case 4+8
+
+-Containers that i want full width must be fluid containers. The other ones are just class="container".
+
+-<small> produces a lighter small text by bootstrap default.
+
+-<mark> is highlighted text, in yellow color.
+
+-classes for coloring texts:
+	.text-danger for errors, wined red
+	.text-success for succes, light green
+	.text-info for information, light blue
+	
+-classes for background texts
+	.bg-primary white over blue
+	.bg-success black over light green
+	.bg-info black over light blue
+	.bg-warning black over light yellow
+	.bg-danger black over pink
+	
+-classes for text alignment:
+	.text-left /center/right/justify
+	
+-class ul/ol lists:
+	.list-inline for inline elements in a list
+	.list-unstyled removes default styles in list
+	
+-class for align two column of texts:
+  <dl class="dl-horizontal">
+    <dt>Coffee</dt>
+    <dd>- black hot drink</dd>
+    <dt>Milk</dt>
+    <dd>- white cold drink</dd>
+  </dl>
+  
+  will produce
+			Coffee -black hot drink
+			Milk   -white cold drink
+
+-basic tables:
+	.table non stripped
+	.table-striped stripped
+	.table-hover will hightlight the row when hovering on it
+	.table-condensed a more condensed table
+	.table-responsive will automatically scroll horizontally
+	To highlight a row in a table, put class="info" inside a tr tag. Other options are "success", "danger", "warning", "active"
+
+-To collapse the inner form in a fashion way, use collapse, like this:
+	<div class="container">
+	  <h2>Simple Collapsible</h2>
+	  <p>Click on the button to toggle between showing and hiding content.</p>
+	  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
+	  <div id="demo" class="collapse">
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+		sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	  </div>
+	</div>
+	
+-navigation components. This is the style I want for my webapp.
+	<div class="container">
+	  <h2>Tabs</h2>
+	  <p>The .nav-pills class is used to create navigation pills:</p>                  
+	  <ul class="nav nav-pills" role="tablist">
+		<li class="active"><a href="#">Home</a></li>
+		<li><a href="#">HTML</a></li>
+		<li><a href="#">CSS</a></li>
+		<li><a href="#">About</a></li>        
+	  </ul>
+	</div>
+	
+-For the wellcome to your school use a jumbotrom:
+	<div class="container row">
+	  <div class="jumbotron col-sm-8">
+		<h1>Bootstrap Tutorial</h1>      
+		<p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p>
+	  </div>
+	  <div class="col-sm-4">
+		<p>This is some text.</p>      
+		<p>This is another text.</p>
+	  </div>
+	</div>
+	
+-The .well class adds a rounded border around an element with a gray background color and some padding:
+	<div class="container">
+	  <h2>Well</h2>
+	  <div class="well">Basic Well</div> //this is medium size, but can also be small: "well well-sm" or large: "well well-lg"
+	</div>
+	
+-The best way to show there is an error is using the alert class:
+  <div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Danger!</strong> This alert box could indicate a dangerous or potentially negative action.
+  </div>
+  
+-BUTTONS:
+	<button type="button" class="btn btn-link">Link</button> this is for the Add and edit link, maybe
+	<button type="button" class="btn">Basic</button> gray color, very basic black over gray
+	<button type="button" class="btn btn-primary">Primary</button> white over blue
+	<button type="button" class="btn btn-danger">Danger</button> this one is good for delete
+	<button type="button" class="btn btn-warning">Warning</button> this is good for closing a form, maybe
+	
+	For the button sizes, use:
+		.btn-lg large
+		.btn-md medium
+		.btn-sm small
+		.btn-xs extra small
+		
+	Block level button, taht spans the entire width of the parent element:
+		<button type="button" class="btn btn-primary btn-block">Button 1</button>
+	
+	To indicate a button is active, use .active. For a disabled button, use .disabled
+	
+	To group several buttons horizontally, put them in a div and use:
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary">Apple</button>
+			<button type="button" class="btn btn-warning">Samsung</button>
+			<button type="button" class="btn btn-danger">Sony</button>
+		</div>
+	
+	For vertically grouping use:
+		<div class="btn-group-vertical">
+			<button type="button" class="btn btn-primary">Apple</button>
+			<button type="button" class="btn btn-primary">Samsung</button>
+			<button type="button" class="btn btn-primary">Sony</button>
+		</div>
+		
+	I could use the user name as a button and then place a submenu: "profile" and "log out" like:
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary">Sony</button>
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+		<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="#">Tablet</a></li>
+			<li><a href="#">Smartphone</a></li>
+		</ul>
+	/div>
+	
+-Icons are pulled out from Glyphicons.com. Tu use them, do like this:
+	<a href="#" class="btn btn-success btn-lg">
+      <span class="glyphicon glyphicon-user"></span> Print 
+    </a>
+	
+-More about dropdown, active, disabled, at https://www.w3schools.com/bootstrap/bootstrap_dropdowns.asp
+
+-For the navigation bar, use this example https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_right&stacked=h
+but use a fixed nav bar as in: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_fixed&stacked=h
+but with the colors in: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_navbar_btn&stacked=h
+
+-Forms: the default vertical form is good for sign in/register forms. But for entering data, the good one is the horizontal one
+	Vertical:
+	<div class="container">
+	  <h2>Vertical (basic) form</h2>
+	  <form action="/action_page.php">
+		<div class="form-group">
+		  <label for="email">Email:</label>
+		  <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+		</div>
+		<div class="form-group">
+		  <label for="pwd">Password:</label>
+		  <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+		</div>
+		<div class="checkbox">
+		  <label><input type="checkbox" name="remember"> Remember me</label>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	  </form>
+	</div>
+	
+	horizontal:
+	<div class="container">
+	  <h2>Horizontal form</h2>
+	  <form class="form-horizontal" action="/action_page.php">
+		<div class="form-group">
+		  <label class="control-label col-sm-2" for="email">Email:</label>
+		  <div class="col-sm-10">
+			<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label class="control-label col-sm-2" for="pwd">Password:</label>
+		  <div class="col-sm-10">          
+			<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+		  </div>
+		</div>
+		<div class="form-group">        
+		  <div class="col-sm-offset-2 col-sm-10">
+			<div class="checkbox">
+			  <label><input type="checkbox" name="remember"> Remember me</label>
+			</div>
+		  </div>
+		</div>
+		<div class="form-group">        
+		  <div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-default">Submit</button>
+		  </div>
+		</div>
+	  </form>
+	</div>
+	
+-For the dropdown list and multiple selection list, use:
+	<div class="container">
+	  <h2>Form control: select</h2>
+	  <p>The form below contains two dropdown menus (select lists):</p>
+	  <form>
+		<div class="form-group">
+		  <label for="sel1">Select list (select one):</label>
+		  <select class="form-control" id="sel1">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+		  </select>
+		  <br>
+		  <label for="sel2">Mutiple select list (hold shift to select more than one):</label>
+		  <select multiple class="form-control" id="sel2">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+		  </select>
+		</div>
+	  </form>
+	</div>
