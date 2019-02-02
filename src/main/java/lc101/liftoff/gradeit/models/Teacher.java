@@ -37,6 +37,7 @@ public class Teacher implements User {
     }
 
     //Getters and setters*********************
+    @Override
     public int getId() {
         return id;
     }
@@ -57,6 +58,7 @@ public class Teacher implements User {
         this.lastName = lastName;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -65,18 +67,22 @@ public class Teacher implements User {
         this.email = email;
     }
 
+    @Override
     public String getUserName() {
         return userName;
     }
 
+    @Override
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
@@ -89,6 +95,7 @@ public class Teacher implements User {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
     public boolean isActive() {
         return active;
     }
@@ -97,10 +104,12 @@ public class Teacher implements User {
         this.active = active;
     }
 
+    @Override
     public boolean isConfirmed() {
         return confirmed;
     }
 
+    @Override
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
     }

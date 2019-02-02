@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Student implements User{ /*done makes this class implement User and refactor using User semantics*/
+public class Student implements User { /*done makes this class implement User and refactor using User semantics*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -43,6 +43,7 @@ public class Student implements User{ /*done makes this class implement User and
     }
 
     //Getters and setters*********************
+    @Override
     public int getId() {
         return id;
     }
@@ -63,6 +64,7 @@ public class Student implements User{ /*done makes this class implement User and
         this.lastName = lastName;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -71,18 +73,22 @@ public class Student implements User{ /*done makes this class implement User and
         this.email = email;
     }
 
+    @Override
     public String getUserName() {
         return userName;
     }
 
+    @Override
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
@@ -103,6 +109,7 @@ public class Student implements User{ /*done makes this class implement User and
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
     public boolean isActive() {
         return active;
     }
@@ -111,10 +118,12 @@ public class Student implements User{ /*done makes this class implement User and
         this.active = active;
     }
 
+    @Override
     public boolean isConfirmed() {
         return confirmed;
     }
 
+    @Override
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
     }

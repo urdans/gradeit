@@ -26,39 +26,28 @@ public class Registrar implements User {
     }
 
     //Getters and setters*********************
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public String getUserName() {
         return userName;
     }
 
+    @Override
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    //artificial methods from interface User
-    @Override
-    public String getEmail() {
-        return null;
-    }
-
-    @Override
-    public boolean isActive() {
-        return false;
-    }
-
-    @Override
-    public boolean isConfirmed() {
-        return false;
     }
 }

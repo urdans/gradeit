@@ -29,22 +29,35 @@
     </div>
     <div>
         Showing:
-		<select>
-			<option value="group_id">Group A1</option>
-			<option value="group_id">Group A2</option>
-			<option value="group_id">Group B1</option>
-			<option value="group_id">Group B2</option>
-		</select>
+        <form method="post" th:object="${form}">
+            <select th:field="*{groupId}">
+                <option value="0">All groups</option>
+                <option th:each="group : *{groups}" th:value="${group.id}" th:text="${group.name}"></option>
+            </select>
+            <button type="submit">Apply</button>
+        </form>
     </div>
+<hr>
     <div>
         <table>
             <tr>
 			    <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Group</th>
                 <th></th>
             </tr>
-            <tr>
+
+            <tr th:each="student : ${students}">
+                <td th:text="${student.firstName}"></td>
+                <td th:text="${student.lastName}"></td>
+                <td th:text="${student.email}"></td>
+                <td><span th:if="${student.group}" th:text="${student.group.name}"></span></td>
+                <td><a th:href="@{'/registrar/student/edit?id=' + ${student.id}}">View/Edit</a></td>
+            </tr>
+
+
+            <!--<tr>
 				<td>John</td>
                 <td>Mac Kinder</td>
                 <td>jmackk@gmail.com</td>
@@ -61,9 +74,9 @@
                 <td>Smith</td>
                 <td>jpen1008@yahoo.com</td>
                 <td><a href="#">View/Edit</a></td>
-            </tr>
+            </tr>-->
             <tr>
-				<td><a href="#">Add</a></td>
+				<td><a href="/registrar/student/add">Add</a></td>
                 <td></td>
                 <td></td>
                 <td></td>

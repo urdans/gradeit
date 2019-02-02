@@ -1,9 +1,31 @@
 SPRING BOOT
 - To use @Autowired in SpringBoot, it must be used inside a component @Component. The autowired object cannot be created
   by the user; We just need to let SpringBoot to create (inject) that object for us.
-  
+- So far, I have demonstrated that the way I implemented the group filtering works.
+  It's not maybe the most practical way (spring way) because I have to code more thant probably I should, but it works!
+
+
 HIBERNATE
 - Always use @ManyToOne BIDIRECTIONAL mapping. It's more efficient and provides more flexibilty by allowing acces to the data from both related tables.
+
+
+JAVA
+- I know now how to use generics with wildcards...!!!
+
+THYMELEAF
+- To bind a SELECT element to an object field in thymeleaf use:
+
+    <select th:field="*{field}">
+    ..
+    ..
+    </select>
+
+  Also, the selected option can be set by using a condition, NOT BOUND to an object field , like:
+
+  <select id="percentage" name="percentage"}">
+      <option th:each="i : ${#numbers.sequence(0, 100)}" th:value="${i}" th:text="${i}"
+        th:selected="${i==75}"></option>
+  </select>
 
 ***********************************
 BOOSTRAP
