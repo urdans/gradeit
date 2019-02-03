@@ -13,16 +13,14 @@
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Students</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Teachers</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Subjects</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Groups</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Mr. Registrone</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/students">Students</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/teachers">Teachers</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/subjects">Subjects</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/groups">Groups</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#" th:text="${username}"></a>
         <div>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
-        </div>        
+            <a class="nav-link" onclick="clearActive(event)" href="/logout">Log out</a>
+        </div>
     </nav>
     <div>
         <h1>Teacher List</h1>
@@ -33,32 +31,21 @@
 			    <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Active</th>
+                <th>Confirmed</th>
                 <th></th>
             </tr>
-            <tr>
-				<td>John</td>
-                <td>Mac Kinder</td>
-                <td>jmackk@gmail.com</td>
-                <td><a href="#">View/Edit</a></td>
+            <tr th:each="teacher : ${teachers}">
+                <td th:text="${teacher.firstName}"></td>
+                <td th:text="${teacher.lastName}"></td>
+                <td th:text="${teacher.email}"></td>
+                <td th:text="${teacher.active} ? 'Yes' : 'No'"></td>
+                <td th:text="${teacher.confirmed} ? 'Yes' : 'No'"></td>
+                <td><a th:href="@{'/registrar/teacher/edit?id=' + ${teacher.id}}">View/Edit</a></td>
             </tr>
             <tr>
-				<td>Carl</td>
-                <td>Pen</td>
-                <td>carlpen@aol.com</td>
-                <td><a href="#">View/Edit</a></td>
+                <td><a href="/registrar/teacher/add">Add</a></td>
             </tr>
-            <tr>
-				<td>Joseph</td>
-                <td>Smith</td>
-                <td>jpen1008@yahoo.com</td>
-                <td><a href="#">View/Edit</a></td>
-            </tr>
-            <tr>
-				<td><a href="#">Add</a></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>			
         </table> 
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -70,6 +70,8 @@ public class IndexController {
                              @RequestParam String username, @RequestParam String password1,
                              @RequestParam String password2) {
         /*Todo html response must include all the fields but password */
+        model.addAttribute("username", username);
+        model.addAttribute("email", email);
         if (email.equals("") || username.equals("") || password1.equals("") || password2.equals("")) {
             model.addAttribute("errormsg", "Please fill in all the fields and try again");
             return register(model);

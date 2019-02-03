@@ -5,8 +5,10 @@ import lc101.liftoff.gradeit.models.Group;
 import javax.validation.constraints.NotNull;
 
 public class GroupForm {
+
     @NotNull(message = "Group Id can't be empty")
     private int groupId;
+
     private Iterable<Group> groups;
 
     public GroupForm() {

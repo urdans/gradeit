@@ -85,7 +85,7 @@ public class UserRegistration {
         throw new RuntimeException("userInfoSet is not set. You must call emailIsInRecords() before using getUserType()");
     }
 
-    /*todo refactor the use of optional where used*/
+    /*done refactor the use of optional where used*/
     /*done refactoring using User interface semantics*/
     private boolean _emailIsInRecords(CrudRepository<? extends User, Integer> userDao, String email) {
         for(User usr: userDao.findAll()) {
@@ -113,16 +113,15 @@ public class UserRegistration {
     }
 
     private boolean _registerNewUser(CrudRepository<? extends User, Integer> userDao, String userName, String Password) {
-        Optional<User> orUser = (Optional<User>) userDao.findById(userId);
-        if(orUser.isPresent()) {
-            User rUser = orUser.get();
-            rUser.setUserName(userName);
-            rUser.setPassword(hashAndSaltPassword(Password));
-            rUser.setConfirmed(true); /*info true for MVP only. Delete this line after MVP*/
+        User user = userDao.findById(userId).orElse(null); //using Optional class
+        if(user != null) {
+            user.setUserName(userName);
+            user.setPassword(hashAndSaltPassword(Password));
+            user.setConfirmed(true); /*info true for MVP only. Delete this line after MVP*/
             if(userDao instanceof StudentDao)
-                studentDao.save((Student)rUser);        //this is a hack, as .save can't infer what rUser is
+                studentDao.save((Student)user);        //this is a hack, as .save can't infer what "user" is
             else if(userDao instanceof TeacherDao)
-                teacherDao.save((Teacher)rUser);
+                teacherDao.save((Teacher)user);
             return true;
         }
         else {

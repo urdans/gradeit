@@ -29,10 +29,10 @@ public class Student implements User { /*done makes this class implement User an
     private String address;
     private String phoneNumber;
 
-    @ColumnDefault("true") //This isn't working
+    @ColumnDefault("true") //This works only for table definition, not for adding records
     private boolean active = true;
 
-    @ColumnDefault("false")
+    @ColumnDefault("false") //This works only for table definition, not for adding records
     private boolean confirmed = false;
 
     @ManyToOne

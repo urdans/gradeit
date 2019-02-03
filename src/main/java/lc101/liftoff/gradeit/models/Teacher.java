@@ -3,25 +3,36 @@ package lc101.liftoff.gradeit.models;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Teacher implements User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NotNull
+    @Size(min=2, message = "First name size must be >= 2")
     private String firstName;
+
     @NotNull
+    @Size(min=2, message = "Last name size must be >= 2")
     private String lastName;
+
+    @Email(message = "Email address should be valid")
     private String email;
+
     private String userName;
     private String password;
     private String phoneNumber;
-    @ColumnDefault("TRUE")
-    private boolean active;
-    @ColumnDefault("FALSE")
-    private boolean confirmed;
+
+    @ColumnDefault("true") //This works only for table definition, not for adding records
+    private boolean active = true;
+
+    @ColumnDefault("false") //This works only for table definition, not for adding records
+    private boolean confirmed = false;
 
     //Constructors****************************
     public Teacher() {
@@ -40,6 +51,10 @@ public class Teacher implements User {
     @Override
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {

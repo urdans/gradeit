@@ -9,21 +9,62 @@
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Students</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Teachers</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Subjects</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Groups</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Mr. Registrone</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/students">Students</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/teachers">Teachers</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/subjects">Subjects</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/groups">Groups</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#" th:text="${username}"></a>
         <div>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
-        </div>        
+            <a class="nav-link" onclick="clearActive(event)" href="/logout">Log out</a>
+        </div>
     </nav>
     <div>
-        <h1>Edit Teacher</h1>
+        <h1 th:if="${editmode}">Edit Teacher</h1>
+        <h1 th:unless="${editmode}">Add Teacher</h1>
     </div>
+
     <div>
+        <form th:action="${editmode} ? '/registrar/teacher/edit/update' : _" method="post" th:object="${teacher}">
+            First name:
+            <input th:field="*{firstName}"><br>
+            <small th:errors="*{firstName}"></small><br>
+
+            Last name:
+            <input th:field="*{lastName}"><br>
+            <small th:errors="*{lastName}"></small><br>
+
+            Email address:
+            <input th:field="*{email}" th:disabled="(${editmode} and *{confirmed})"><br>
+            <small th:errors="*{email}"></small><br>
+
+            Phone number:
+            <input th:field="*{phoneNumber}" th:disabled="(${editmode} and *{confirmed})"><br><br>
+
+            <div th:if="${editmode}">
+                Active:
+                <select th:field="*{active}">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <br>
+
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{confirmed}">
+            <input type="submit" th:value="${editmode} ? 'Save' : 'Add'">
+            <input type="button" onclick="location.href='/registrar/teachers';" value="Cancel" />
+        </form>
+        <p th:text="${errormsg}" th:class="Error">Default error message</p>
+    </div>
+
+
+
+
+
+
+
+
+<!--    <div>
         <form method="post">
             First name: <input type="text" name="firstname"><br>
             Last name: <input type="text" name="lastname"><br>
@@ -40,7 +81,7 @@
 			<input type="submit" value="Cancel">
         </form>
         <span th:text="${errormsg}" th:class="Error">Default error message</span>
-    </div>
+    </div>-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

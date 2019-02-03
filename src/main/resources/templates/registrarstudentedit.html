@@ -24,9 +24,12 @@
     </div>
     <div>
         <form th:action="${editmode} ? '/registrar/student/edit/update' : _" method="post" th:object="${student}">
-            First name: <input th:field="*{firstName}"><br>
+            First name:
+            <input th:field="*{firstName}"><br>
             <small th:errors="*{firstName}"></small><br>
-            Last name: <input th:field="*{lastName}"><br>
+
+            Last name:
+            <input th:field="*{lastName}"><br>
             <small th:errors="*{lastName}"></small><br>
 
             Group:
@@ -34,20 +37,17 @@
                 <option value="0">No group</option>
                 <option th:each="group : ${groupForm.groups}" th:value="${group.id}" th:text="${group.name}"></option>
             </select>
-            <br>
+            <br><br>
 
             Email address:
-            <input th:field="*{email}" th:disabled="(${editmode} and *{confirmed})">
-            <br>
+            <input th:field="*{email}" th:disabled="(${editmode} and *{confirmed})"><br>
             <small th:errors="*{email}"></small><br>
 
             Address:
-            <input th:field="*{address}" th:disabled="(${editmode} and *{confirmed})">
-            <br>
+            <input th:field="*{address}" th:disabled="(${editmode} and *{confirmed})"><br><br>
 
             Phone number:
-            <input th:field="*{phoneNumber}" th:disabled="(${editmode} and *{confirmed})">
-            <br>
+            <input th:field="*{phoneNumber}" th:disabled="(${editmode} and *{confirmed})"><br>
 
             <div th:if="${editmode}">
                 Active:
@@ -61,7 +61,14 @@
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{confirmed}">
 
-            <input type="submit" value="Submit">
+            <input type="submit" th:value="${editmode} ? 'Save' : 'Add'">
+
+            <!--<button type="submit" formaction="/registrar/students" formmethod="get">Cancel</button>-->
+            <!--<button type="button"><a href="/registrar/students">Cancel</a></button>-->
+            <input type="button" onclick="location.href='/registrar/students';" value="Cancel" />
+            <!--<form action="/registrar/students" method="get">
+                <input type="submit" value="Cancelar">
+            </form>-->
         </form>
         <p th:text="${errormsg}" th:class="Error">Default error message</p>
     </div>

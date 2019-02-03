@@ -1,7 +1,5 @@
 package lc101.liftoff.gradeit.tools;
 
-import java.security.SecureRandom;
-
 import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 public class HashTools {
@@ -23,10 +21,6 @@ public class HashTools {
 
 
     public static String hashAndSaltPassword(String password) {
-//        String saltStr = randomAlphaNumeric(16);
-//
-//        String saltedHash = sha1Hex(saltStr + password);
-//        return saltStr + "." + saltedHash;
         return hashAndSaltPassword(randomAlphaNumeric(16), password);
     }
 

@@ -17,8 +17,8 @@
     <div>
         <h3>Register</h3>
         <form method="post">
-            Email address: <input type="text" name="email"><br>
-            User name: <input type="text" name="username"><br>
+            Email address: <input type="text" name="email" th:value="${email}"><br>
+            User name: <input type="text" name="username" th:value="${username}"><br>
             Password: <input type="password" name="password1"><br>
             Retype password: <input type="password" name="password2"><br>
 
