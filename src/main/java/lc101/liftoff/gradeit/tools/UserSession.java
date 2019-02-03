@@ -22,6 +22,7 @@ public class UserSession {
 
     private UserType userType;
     private int userId;
+    private String userName;
     private boolean sessionExists;
     private HttpServletRequest request;
     private HttpSession session;
@@ -106,6 +107,16 @@ public class UserSession {
         session = request.getSession(true);
         session.setAttribute("usertype", userType.toString());
         session.setAttribute("userid", String.valueOf(userId));
+        session.setAttribute("username", String.valueOf(userName));
+    }
+
+    public String getSessionUserName(HttpServletRequest aRequest) {
+        session = request.getSession(false);
+        if (session == null)
+            return "";
+        else {
+            return (String) session.getAttribute("username");
+        }
     }
 
     public boolean isStudent() {
@@ -141,6 +152,7 @@ public class UserSession {
             String providedSaltedPassword = HashTools.hashAndSaltPassword(salt, uPwd);
             if (un.equals(uName) & psw.equals(providedSaltedPassword)) {
                 userId = usr.getId();
+                userName = uName;
                 return true;
             }
         }

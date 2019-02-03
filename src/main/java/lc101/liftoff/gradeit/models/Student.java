@@ -3,29 +3,40 @@ package lc101.liftoff.gradeit.models;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Student implements User { /*done makes this class implement User and refactor using User semantics*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NotNull
+    @Size(min=2, message = "First name size must be >= 2")
     private String firstName;
+
     @NotNull
+    @Size(min=2, message = "Last name size must be >= 2")
     private String lastName;
+
+    @Email(message = "Email address should be valid")
     private String email;
+
     private String userName;
     private String password;
     private String address;
     private String phoneNumber;
-    @ColumnDefault("TRUE")
-    private boolean active;
-    @ColumnDefault("FALSE")
-    private boolean confirmed;
+
+    @ColumnDefault("true") //This isn't working
+    private boolean active = true;
+
+    @ColumnDefault("false")
+    private boolean confirmed = false;
+
     @ManyToOne
     @JoinColumn(name = "group_id")
-    //, foreignKey = @ForeignKey(name = "fk_student_group")) ->not necessary, cascading dont works well in JPA
     private Group group;
 
     //Constructors****************************
@@ -46,6 +57,10 @@ public class Student implements User { /*done makes this class implement User an
     @Override
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {

@@ -74,7 +74,7 @@ public class UserRegistration {
         String token = HashTools.hash(userName + userEmail + String.valueOf(userId) + String.valueOf(ut));
         String link = "http://localhost:8080/registrationconfirmation?token=" + token + "&email=" + userEmail +
                 "&userid=" + String.valueOf(userId) + "&usertype=" + String.valueOf(ut);
-        /*todo for after MVP: Send and email with the link to the user email address*/
+        /*info for after MVP: Send and email with the link to the user email address*/
         return true;
     }
 
@@ -85,6 +85,7 @@ public class UserRegistration {
         throw new RuntimeException("userInfoSet is not set. You must call emailIsInRecords() before using getUserType()");
     }
 
+    /*todo refactor the use of optional where used*/
     /*done refactoring using User interface semantics*/
     private boolean _emailIsInRecords(CrudRepository<? extends User, Integer> userDao, String email) {
         for(User usr: userDao.findAll()) {
@@ -117,7 +118,7 @@ public class UserRegistration {
             User rUser = orUser.get();
             rUser.setUserName(userName);
             rUser.setPassword(hashAndSaltPassword(Password));
-            rUser.setConfirmed(true); /*todo true for MVP only. Delete this line after MVP*/
+            rUser.setConfirmed(true); /*info true for MVP only. Delete this line after MVP*/
             if(userDao instanceof StudentDao)
                 studentDao.save((Student)rUser);        //this is a hack, as .save can't infer what rUser is
             else if(userDao instanceof TeacherDao)

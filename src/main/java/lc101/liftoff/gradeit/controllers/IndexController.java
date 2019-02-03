@@ -36,7 +36,7 @@ public class IndexController {
             if (userSession.isRegistrar())
                 return "redirect:/registrar/students"; //home for registrar users
         }
-        /*todo
+        /*info
          * Use this place to test outputs*/
 //        System.out.println(HashTools.hashAndSaltPassword("1234"));
 
@@ -102,7 +102,7 @@ public class IndexController {
         }
     }
 
-    /*todo implement after MVP*/
+    /*info implement after MVP*/
     @RequestMapping(value = "registrationconfirmation", method = RequestMethod.GET)
     public String registrationConfirmed(HttpServletRequest request) {
         //if the token (registrationconfirmation?token=123456ABCD&email=urdans@gmail.com&userid=49&usertype=1) is

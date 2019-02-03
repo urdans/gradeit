@@ -8,9 +8,45 @@ SPRING BOOT
 HIBERNATE
 - Always use @ManyToOne BIDIRECTIONAL mapping. It's more efficient and provides more flexibilty by allowing acces to the data from both related tables.
 
+- To get filtered results from a Dao object, I can code in the Dao interface declaration, in two ways:
+    1.  the complex way: this is good for whe a complex criteria need to be applied to a result set; This example is not complex enough but
+        serves to illustrate:
+
+        @Repository("StudentDao")
+        @Transactional
+        public interface StudentDao extends CrudRepository<Student, Integer> {
+            default Iterable<Student> filterByGroup99(int groupId) {
+                if(groupId == 0) return findAll();
+                ArrayList<Student> allStudents = (ArrayList<Student>) findAll();
+                ArrayList<Student> filteredStudents = new ArrayList<>();
+                for (Student student : allStudents) {
+                    Group group = student.getGroup();
+                    if (group != null) {
+                        if (group.getId() == groupId) filteredStudents.add(student);
+                    }
+                }
+                return filteredStudents;
+            }
+    2. the practical and easy way: this way requires using native SQL; I prefer this one:
+        @Repository("StudentDao")
+        @Transactional
+        public interface StudentDao extends CrudRepository<Student, Integer> {
+            @Query(value = "SELECT * FROM STUDENT WHERE GROUP_ID = ?1", nativeQuery = true)
+            List<Student> findAllByGroupId(int groupId);
+        }
+
+        This couldn't be simpler!.
+        I learnt this in
+            https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.at-query
+        I found some pre-a-porté useful methods in
+            https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+
 
 JAVA
 - I know now how to use generics with wildcards...!!!
+- regex email validations:
+    simple: "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b"
+    RFC 2822 version: "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
 
 THYMELEAF
 - To bind a SELECT element to an object field in thymeleaf use:

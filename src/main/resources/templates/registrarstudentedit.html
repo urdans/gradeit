@@ -9,38 +9,61 @@
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Students</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Teachers</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Subjects</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Groups</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Mr. Registrone</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/students">Students</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/teachers">Teachers</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/subjects">Subjects</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/groups">Groups</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#" th:text="${username}"></a>
         <div>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
-        </div>        
+            <a class="nav-link" onclick="clearActive(event)" href="/logout">Log out</a>
+        </div>
     </nav>
     <div>
-        <h1>Edit Student</h1>
+        <h1 th:if="${editmode}">Edit Student</h1>
+        <h1 th:unless="${editmode}">Add Student</h1>
     </div>
     <div>
-        <form method="post">
-            First name: <input type="text" name="firstname"><br>
-            Last name: <input type="text" name="lastname"><br>
-            Group: <input type="text" name="group"><br>
-            Email address: <input type="text" name="email"><br>
-            Address: <input type="text" name="address"><br>
-            Phone number: <input type="text" name="phonenumber"><br>
-			Active:
-			<select>
-				<option value="1">Yes</option>
-				<option value="0">No</option>
-			</select>
+        <form th:action="${editmode} ? '/registrar/student/edit/update' : _" method="post" th:object="${student}">
+            First name: <input th:field="*{firstName}"><br>
+            <small th:errors="*{firstName}"></small><br>
+            Last name: <input th:field="*{lastName}"><br>
+            <small th:errors="*{lastName}"></small><br>
+
+            Group:
+            <select th:field="${groupForm.groupId}">
+                <option value="0">No group</option>
+                <option th:each="group : ${groupForm.groups}" th:value="${group.id}" th:text="${group.name}"></option>
+            </select>
+            <br>
+
+            Email address:
+            <input th:field="*{email}" th:disabled="(${editmode} and *{confirmed})">
+            <br>
+            <small th:errors="*{email}"></small><br>
+
+            Address:
+            <input th:field="*{address}" th:disabled="(${editmode} and *{confirmed})">
+            <br>
+
+            Phone number:
+            <input th:field="*{phoneNumber}" th:disabled="(${editmode} and *{confirmed})">
+            <br>
+
+            <div th:if="${editmode}">
+                Active:
+                <select th:field="*{active}">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
 			<br>
-            <input type="submit" value="Save">
-			<input type="submit" value="Cancel">
+            <!--hidden values-->
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{confirmed}">
+
+            <input type="submit" value="Submit">
         </form>
-        <span th:text="${errormsg}" th:class="Error">Default error message</span>
+        <p th:text="${errormsg}" th:class="Error">Default error message</p>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>

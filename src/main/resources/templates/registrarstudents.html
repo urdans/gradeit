@@ -13,13 +13,11 @@
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Students</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Teachers</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Subjects</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Groups</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Mr. Registrone</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/students">Students</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/teachers">Teachers</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/subjects">Subjects</a>
+		<a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/groups">Groups</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#" th:text="${username}"></a>
         <div>
             <a class="nav-link" onclick="clearActive(event)" href="/logout">Log out</a>
         </div>        
@@ -29,7 +27,7 @@
     </div>
     <div>
         Showing:
-        <form method="post" th:object="${form}">
+        <form method="post" th:object="${groupForm}">
             <select th:field="*{groupId}">
                 <option value="0">All groups</option>
                 <option th:each="group : *{groups}" th:value="${group.id}" th:text="${group.name}"></option>
@@ -45,6 +43,8 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Group</th>
+                <th>Active</th>
+                <th>Confirmed</th>
                 <th></th>
             </tr>
 
@@ -52,29 +52,14 @@
                 <td th:text="${student.firstName}"></td>
                 <td th:text="${student.lastName}"></td>
                 <td th:text="${student.email}"></td>
-                <td><span th:if="${student.group}" th:text="${student.group.name}"></span></td>
+                <!--<td><span th:if="${student.group}" th:text="${student.group.name}"></span></td>-->
+                <td th:text="${student.group} ? ${student.group.name} : ''"></span></td>
+
+                <td th:text="${student.active} ? 'Yes' : 'No'"></td>
+                <td th:text="${student.confirmed} ? 'Yes' : 'No'"></td>
+
                 <td><a th:href="@{'/registrar/student/edit?id=' + ${student.id}}">View/Edit</a></td>
             </tr>
-
-
-            <!--<tr>
-				<td>John</td>
-                <td>Mac Kinder</td>
-                <td>jmackk@gmail.com</td>
-                <td><a href="#">View/Edit</a></td>
-            </tr>
-            <tr>
-				<td>Carl</td>
-                <td>Pen</td>
-                <td>carlpen@aol.com</td>
-                <td><a href="#">View/Edit</a></td>
-            </tr>
-            <tr>
-				<td>Joseph</td>
-                <td>Smith</td>
-                <td>jpen1008@yahoo.com</td>
-                <td><a href="#">View/Edit</a></td>
-            </tr>-->
             <tr>
 				<td><a href="/registrar/student/add">Add</a></td>
                 <td></td>
