@@ -6,6 +6,7 @@ import lc101.liftoff.gradeit.models.Student;
 import lc101.liftoff.gradeit.models.Teacher;
 import lc101.liftoff.gradeit.models.data.GroupDao;
 import lc101.liftoff.gradeit.models.data.StudentDao;
+import lc101.liftoff.gradeit.models.data.SubjectDao;
 import lc101.liftoff.gradeit.models.data.TeacherDao;
 import lc101.liftoff.gradeit.models.forms.GroupForm;
 import lc101.liftoff.gradeit.tools.UserSession;
@@ -37,9 +38,12 @@ public class RegistrarController {
     @Autowired
     private TeacherDao teacherDao;
 
+    @Autowired
+    private SubjectDao subjectDao;
+
     private int filterByGroupId = 0; //0 means "All groups"
 
-    private boolean registrarLoggedIn(HttpServletRequest request) {
+    public boolean registrarLoggedIn(HttpServletRequest request) {
         return (userSession.decodeSession(request)) & (userSession.isRegistrar());
     }
 
@@ -270,8 +274,23 @@ public class RegistrarController {
         return "redirect:/registrar/teachers";
     }
 
+    @RequestMapping(value = "subjects", method = RequestMethod.GET)
+    public String registrarSubjects(Model model, HttpServletRequest request) {
+
+        if (!registrarLoggedIn(request)) return "redirect:/";
+
+        model.addAttribute("subjects", subjectDao.findAll());
+        return "registrarsubjects";
+    }
+
+
     /*todo next
      * implement the subject sub section
      * implement the groups sub section
      * */
+
+    /*todo (keep in mid the reference integrity when deleting). Maybe not, what is active for?
+     * implement student deletion
+     * implement teacher deletion
+     */
 }

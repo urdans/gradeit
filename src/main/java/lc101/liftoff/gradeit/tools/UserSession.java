@@ -108,6 +108,7 @@ public class UserSession {
         session.setAttribute("usertype", userType.toString());
         session.setAttribute("userid", String.valueOf(userId));
         session.setAttribute("username", String.valueOf(userName));
+        session.setMaxInactiveInterval(-1); /*never expire the session. no timeout*/
     }
 
     public String getSessionUserName(HttpServletRequest aRequest) {

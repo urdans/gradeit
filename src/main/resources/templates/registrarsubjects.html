@@ -8,72 +8,68 @@
     <title>Document</title>
 
     <!-- <link rel="stylesheet" th:href="@{/css/styles.css}"/> -->
-    <!-- <script type="text/javascript" th:src="@{/js/studenthome.js}"></script> -->
 
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Students</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Teachers</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Subjects</a>
-		<a class="nav-link disabled" onclick="clearActive(event)" href="#">Groups</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Mr. Registrone</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/students">Students</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/teachers">Teachers</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/subjects">Subjects</a>
+        <a class="nav-link disabled" onclick="clearActive(event)" href="/registrar/groups">Groups</a>
+        <a class="nav-link" onclick="clearActive(event)" href="#" th:text="${username}"></a>
         <div>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
-        </div>       
+            <a class="nav-link" onclick="clearActive(event)" href="/logout">Log out</a>
+        </div>
     </nav>
     <div>
         <h1>Subject List</h1>
     </div>
     <div>
-        <table>
-            <tr>
-			    <th>Name</th>
-                <th></th>
-            </tr>
-            <tr>
-				<td>Math</td>
-				<td><a href="#">Edit</td>
-            </tr>
-            <tr>
-				<td>Science</td>
-				<td><a href="#">Edit</td>
-            </tr>
-            <tr>
-				<td>Literature</td>
-                <td><a href="#">Edit</td>
-            </tr>
-            <tr>
-				<td>Biology</td>
-                <td><a href="#">Edit</td>
-            </tr>
-            <tr>
-				<td><a href="#">Add</td>
-                <td></td>
-            </tr>
+        <table id="subject-table">
+            <tbody id="subject-list">
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="subject : ${subjects}" th:id="'rowid-' + ${subject.id}">
+                    <td th:text="${subject.name}" th:id="${subject.id}"></td>
+                    <td><a th:id="'editId-' + ${subject.id}" href="#">Edit</a></td>
+                    <td><a th:id="'deleteId-' + ${subject.id}" href="#">Delete</a>
+<!--                        <form id="cell-form" method="post">
+                            <input type="hidden" th:value="${subject.id}">
+                            <a th:id="'deleteId-' + ${subject.id}" href="#">Delete</a>
+                        </form>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td><a id="a-link-add" href="#">Add</a></td>
+                </tr>
+            </tbody>
 		</table>
     </div>
-	<div>
+	<div id="edit-form" hidden>
 		<div>
-			<h3>Editing the subject</h3>
+			<h3 id="subject-form">Adding a new subject</h3>
+            Name: <input id="subject-name-box" type="text"><br>
+        </div>
+		<div>
+			<button id="add-edit-button">Add</button>
+			<button id="cancel-button">Cancel</button>
 		</div>
-		<form method="post">
-            Name: <input type="text" name="email"><br>
-        </form>		
-		<div>
-			<button>Submit</button>
-			<button>Cancel</button>
-			<button>Delete</button>
-		</div>	
 	</div>
     
 	
-	<div>
+<!--	<div>
 		<span th:text="${errormsg}" th:class="Error">Default error message</span>
-	</div>
-	
+	</div>-->
+
+    <div id="errormsg" hidden>
+        <span>Default error message</span>
+    </div>
+
+    <script type="text/javascript" th:src="@{/js/registrarsubjects.js}"></script>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
