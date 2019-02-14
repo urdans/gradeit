@@ -8,4 +8,5 @@ import javax.transaction.Transactional;
 @Repository("RegistrarDao")
 @Transactional
 public interface RegistrarDao extends CrudRepository<Registrar, Integer> {
+
 }

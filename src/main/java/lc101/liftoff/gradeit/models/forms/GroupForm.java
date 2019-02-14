@@ -14,6 +14,11 @@ public class GroupForm {
     public GroupForm() {
     }
 
+    public Group getFirstGroup() {
+        if(groups.iterator().hasNext()) return groups.iterator().next();
+        else return null;
+    }
+
     public GroupForm(int groupId, Iterable<Group> groups) {
         this.groupId = groupId;
         this.groups = groups;

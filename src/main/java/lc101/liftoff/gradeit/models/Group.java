@@ -2,6 +2,7 @@ package lc101.liftoff.gradeit.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Group {
     private int id;
 
     @NotNull
+    @Size(min=1, message = "Group name size must be >= 1")
     private String name;
 
     @OneToMany(mappedBy = "group")

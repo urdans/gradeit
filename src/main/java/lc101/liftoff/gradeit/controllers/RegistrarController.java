@@ -4,10 +4,7 @@ package lc101.liftoff.gradeit.controllers;
 import lc101.liftoff.gradeit.models.Group;
 import lc101.liftoff.gradeit.models.Student;
 import lc101.liftoff.gradeit.models.Teacher;
-import lc101.liftoff.gradeit.models.data.GroupDao;
-import lc101.liftoff.gradeit.models.data.StudentDao;
-import lc101.liftoff.gradeit.models.data.SubjectDao;
-import lc101.liftoff.gradeit.models.data.TeacherDao;
+import lc101.liftoff.gradeit.models.data.*;
 import lc101.liftoff.gradeit.models.forms.GroupForm;
 import lc101.liftoff.gradeit.tools.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,30 +33,30 @@ public class RegistrarController {
     private GroupDao groupDao;
 
     @Autowired
+    private GroupingDao groupingDao;
+
+    @Autowired
     private TeacherDao teacherDao;
 
     @Autowired
     private SubjectDao subjectDao;
-
-    private int filterByGroupId = 0; //0 means "All groups"
 
     public boolean registrarLoggedIn(HttpServletRequest request) {
         return (userSession.decodeSession(request)) & (userSession.isRegistrar());
     }
 
     @RequestMapping(value = "students", method = RequestMethod.GET)
-    public String registrarStudents(Model model, HttpServletRequest request) {
+    public String registrarStudents(Model model, HttpServletRequest request, @ModelAttribute @Valid GroupForm groupForm) {
 
         if (!registrarLoggedIn(request)) return "redirect:/";
 
-        GroupForm groupForm = new GroupForm(filterByGroupId, groupDao.findAll());
-        model.addAttribute("groupForm", groupForm);
+        groupForm.setGroups(groupDao.findAll()); //alway update the list of group names
         Iterable<Student> filteredStudentList;
 
-        if (filterByGroupId == 0)
+        if (groupForm.getGroupId() == 0) //first request
             filteredStudentList = studentDao.findAll();
         else
-            filteredStudentList = studentDao.findAllByGroupId(filterByGroupId);
+            filteredStudentList = studentDao.findAllByGroupId(groupForm.getGroupId());
 
         model.addAttribute("students", filteredStudentList);
         model.addAttribute("username", userSession.getSessionUserName(request));
@@ -68,21 +65,16 @@ public class RegistrarController {
 
     @RequestMapping(value = "students", method = RequestMethod.POST)
     public String registrarStudentApplyFilter(Model model, HttpServletRequest request, @ModelAttribute @Valid GroupForm groupForm) {
-
-        if (!registrarLoggedIn(request)) return "redirect:/";
-
-        filterByGroupId = groupForm.getGroupId();
-        return registrarStudents(model, request);
+        return registrarStudents(model, request, groupForm);
     }
 
     @RequestMapping(value = "student/add", method = RequestMethod.GET)
-    public String registrarStudentAdd(Model model, HttpServletRequest request) {
+    public String registrarStudentAdd(Model model, HttpServletRequest request, @ModelAttribute @Valid GroupForm groupForm) {
 
         if (!registrarLoggedIn(request)) return "redirect:/";
 
         //omitting "editmode" attribute means this is on "add mode"
-        GroupForm groupForm = new GroupForm(filterByGroupId, groupDao.findAll());
-        model.addAttribute("groupForm", groupForm);
+        groupForm.setGroups(groupDao.findAll()); //will always suggest the first group in the first request
         model.addAttribute(new Student());
         model.addAttribute("username", userSession.getSessionUserName(request));
         return "registrarstudentedit";
@@ -279,18 +271,47 @@ public class RegistrarController {
 
         if (!registrarLoggedIn(request)) return "redirect:/";
 
+        model.addAttribute("username", userSession.getSessionUserName(request));
         model.addAttribute("subjects", subjectDao.findAll());
         return "registrarsubjects";
     }
 
+    @RequestMapping(value = "groups", method = RequestMethod.GET)
+    public String registrarGroups(Model model, HttpServletRequest request, @ModelAttribute() @Valid GroupForm groupForm) {
+
+        if (!registrarLoggedIn(request)) return "redirect:/";
+
+        groupForm.setGroups(groupDao.findAll()); //always update the group list from the db
+
+        if(groupForm.getGroupId() == 0) { //means it's the first request to this endpoint
+            Group group = groupForm.getFirstGroup();
+            if (group != null) groupForm.setGroupId(group.getId());
+        }
+
+        model.addAttribute("grouping", groupingDao.findAllByGroupId(groupForm.getGroupId()));
+        model.addAttribute("teachers", teacherDao.getActiveTeachers());
+        model.addAttribute("subjects", subjectDao.findAll());
+        model.addAttribute("username", userSession.getSessionUserName(request));
+
+        return "registrargroups";
+    }
+
+    @RequestMapping(value = "groups", method = RequestMethod.POST)
+    public String registrarGroupsApplyFilter(Model model, HttpServletRequest request, @ModelAttribute() @Valid GroupForm groupForm) {
+        return registrarGroups(model, request, groupForm);
+    }
+
 
     /*todo next
-     * implement the subject sub section
      * implement the groups sub section
      * */
 
-    /*todo (keep in mid the reference integrity when deleting). Maybe not, what is active for?
+    /*todo (keep in mid the reference integrity when deleting). Maybe no need to delete, what is active for?
      * implement student deletion
      * implement teacher deletion
+     */
+
+    /*todo
+     * if a student or a teacher is singning in and he is not active, he wont be able to sign in.
      */
 }

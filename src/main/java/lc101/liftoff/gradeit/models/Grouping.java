@@ -1,5 +1,7 @@
 package lc101.liftoff.gradeit.models;
 
+import lc101.liftoff.gradeit.models.forms.GroupingForm;
+
 import javax.persistence.*;
 
 @Entity
@@ -26,6 +28,12 @@ public class Grouping {
 
     public Grouping(Group group) {
         this.group = group;
+    }
+
+    public Grouping(Group group, Subject subject, Teacher teacher) {
+        this.group = group;
+        this.teacher = teacher;
+        this.subject = subject;
     }
 
     //Getters and setters*********************
