@@ -39,8 +39,8 @@
     <div>
         <table>
             <tr>
-			    <th>First Name</th>
                 <th>Last Name</th>
+			    <th>First Name</th>
                 <th>Email</th>
                 <th>Group</th>
                 <th>Active</th>
@@ -49,8 +49,8 @@
             </tr>
 
             <tr th:each="student : ${students}">
-                <td th:text="${student.firstName}"></td>
                 <td th:text="${student.lastName}"></td>
+                <td th:text="${student.firstName}"></td>
                 <td th:text="${student.email}"></td>
                 <!--<td><span th:if="${student.group}" th:text="${student.group.name}"></span></td>-->
                 <td th:text="${student.group} ? ${student.group.name} : ''"></span></td>

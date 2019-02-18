@@ -35,12 +35,7 @@
                 <tr th:each="subject : ${subjects}" th:id="'rowid-' + ${subject.id}">
                     <td th:text="${subject.name}" th:id="${subject.id}"></td>
                     <td><a th:id="'editId-' + ${subject.id}" href="#">Edit</a></td>
-                    <td><a th:id="'deleteId-' + ${subject.id}" href="#">Delete</a>
-<!--                        <form id="cell-form" method="post">
-                            <input type="hidden" th:value="${subject.id}">
-                            <a th:id="'deleteId-' + ${subject.id}" href="#">Delete</a>
-                        </form>-->
-                    </td>
+                    <td><a th:id="'deleteId-' + ${subject.id}" href="#">Delete</a></td>
                 </tr>
                 <tr>
                     <td><a id="a-link-add" href="#">Add</a></td>

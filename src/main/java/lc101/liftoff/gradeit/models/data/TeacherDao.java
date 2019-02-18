@@ -14,12 +14,32 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
     @Query(value="SELECT COUNT(ID) FROM STUDENT WHERE EMAIL =?1 AND EMAIL <>''", nativeQuery = true)
     int countAllByEmail(String aEmail);
 
-/*
-    @Query(value = "SELECT ID, CONCAT(FIRST_NAME, ' ',LAST_NAME) AS NAME FROM TEACHER WHERE ACTIVE", nativeQuery = true)
-    List<TeacherForm> getActiveTeachers();
-*/
-
     @Query(value = "SELECT * FROM TEACHER WHERE ACTIVE", nativeQuery = true)
     List<Teacher> getActiveTeachers();
 
+    Iterable<Teacher> findAllByOrderByLastName();
+
+    @Query(value =
+            "SELECT " +
+                "groupingid, groupid, groupname, subjectid, subject.name as subjectname " +
+            "FROM " +
+                "(SELECT " +
+                    "groupingid, group_id as groupid, `group`.name as groupname, subject_id as subjectid " +
+                "FROM " +
+                    "(SELECT " +
+                        "grouping.id as groupingid, grouping.group_id, grouping.subject_id " +
+                    "FROM " +
+                        "grouping " +
+                    "INNER JOIN " +
+                        "teacher ON teacher.id = grouping.teacher_id " +
+                    "WHERE " +
+                        "teacher.id = ?1" +
+                    ") AS teachergroups " +
+                "INNER JOIN " +
+                    "`group` ON `group`.id = teachergroups.group_id) AS teachergroupsandsubjects " +
+            "INNER JOIN " +
+                "`subject` ON `subject`.id = teachergroupsandsubjects.subjectid " +
+            "ORDER BY groupname, subjectname"
+            ,nativeQuery = true)
+    List<IGroupSubjectPair> teacherGroupsAndSubjects(int teacherId);
 }

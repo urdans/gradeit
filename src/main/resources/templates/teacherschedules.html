@@ -13,87 +13,81 @@
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Roster</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Schedules</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Tadeo Jones</a>
+        <a class="nav-link" href="/teacher/roster">Roster</a>
+        <a class="nav-link" href="/teacher/schedules">Schedules</a>
+        <a class="nav-link" href="#" th:text="${username}"></a>
         <div>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Profile</a>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
-        </div>        
+            <a class="nav-link" href="/teacher/profile">Profile</a>
+            <a class="nav-link" href="/logout">Log out</a>
+        </div>
     </nav>
-    <div>
-        <h1>Math Evalueation Plan</h1>
-    </div>
+
     <div>
         Showing:
-		<select>
-			<option value="subject_id">Math</option>
-			<option value="subject_id">Science</option>
-			<option value="subject_id">Literature</option>
-			<option value="subject_id">Biology</option>
-		</select>
+        <form method="post" id="groupSubjectPairForm" th:object="${groupSubjectPairForm}">
+            <select th:field="*{selectedPair}">
+                <option th:each="pair : *{pairs}" th:value="${pair.groupingId}"
+                        th:text="${pair.groupName} + ' - ' + ${pair.subjectName}"></option>
+            </select>
+        </form>
     </div>
+    <br>
+    <hr>
+
     <div>
-        <table>
+        <h1 id="roster-title">`</h1>
+    </div>
+
+    <div>
+        <table id="schedule-table">
             <tr>
 			    <th>Description</th>
                 <th>Date</th>
                 <th>%</th>
             </tr>
-            <tr>
-				<td>Test</td>
-                <td>12/15/2018</td>
-                <td>30%</td>
-				<td><a href="#">Edit</td>
+            <tr th:each="schedule : ${schedules}" th:id="'rowid-' + ${schedule.id}">
+                <td th:text="${schedule.description}"></td>
+                <td th:text="${#calendars.format(schedule.date,'MM/dd/yyyy')}"></td>
+                <td th:text="${schedule.percentage} + '%'"></td>
+                <td><a th:id="'editId-' + ${schedule.id}" href="#">Edit</a>
+                <td><a th:id="'deleteId-' + ${schedule.id}" href="#">Delete</a>
             </tr>
             <tr>
-				<td>Test</td>
-                <td>01/25/2019</td>
-                <td>30%</td>
-				<td><a href="#">Edit</td>
+                <td></td>
+                <td>Total</td>
+                <td id="total">0%</td>
             </tr>
             <tr>
-				<td>Test</td>
-                <td>02/15/2019</td>
-                <td>30%</td>
-				<td><a href="#">Edit</td>
-            </tr>
-            <tr>
-				<td>Assignment</td>
-                <td>02/28/2019</td>
-                <td>10%</td>
-				<td><a href="#">Edit</td>
-            </tr>
-            <tr>
-				<td><a href="#">Add</td>
-                <td>Total:</td>
-                <td>100%</td>
+                <td><a id="a-link-add" href="#">Add</a></td>
             </tr>
 		</table>
+        <div id="under-table-msg" hidden>
+            <span>Default error message</span>
+        </div>
     </div>
-	<div>
-		<div>
-			<h3>Editing the evaluation plan</h3>
-		</div>
-		<form method="post">
-            Description: <input type="text" name="email"><br>
-            Date: <input type="text" name="username"><br>
-            Percentage: <input type="password" name="password1"><br>
-        </form>		
-		<div>
-			<button>Submit</button>
-			<button>Cancel</button>
-			<button>Delete</button>
-		</div>	
-	</div>
-    
+
+    <div id="edit-form" hidden>
+        <div>
+            <h3 id="edit-form-title">Adding a new evaluation</h3>
+            Description: <input id="description-box" type="text"><br>
+            Date: <input id="date-box" type="date"><br>
+            Percentage (%): <input id="percentage-box" type="number"><br>
+        </div>
+        <div>
+            <button id="action-button">Add</button>
+            <button id="close-button">Close</button>
+        </div>
+        <div id="edit-msg" hidden>
+            <span>Default error message</span>
+        </div>
+    </div>
+
 	
 	<div>
 		<span th:text="${errormsg}" th:class="Error">Default error message</span>
 	</div>
-	
+
+    <script type="text/javascript" th:src="@{/js/teacherschedule.js}"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

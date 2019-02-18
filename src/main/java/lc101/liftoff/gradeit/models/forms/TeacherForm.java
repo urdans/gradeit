@@ -1,12 +1,11 @@
 package lc101.liftoff.gradeit.models.forms;
 
 import lc101.liftoff.gradeit.models.Teacher;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component("TeacherForm")
+
 public class TeacherForm {
     public int id;
     public String name;

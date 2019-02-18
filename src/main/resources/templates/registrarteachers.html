@@ -28,16 +28,16 @@
     <div>
         <table>
             <tr>
-			    <th>First Name</th>
                 <th>Last Name</th>
+			    <th>First Name</th>
                 <th>Email</th>
                 <th>Active</th>
                 <th>Confirmed</th>
                 <th></th>
             </tr>
             <tr th:each="teacher : ${teachers}">
-                <td th:text="${teacher.firstName}"></td>
                 <td th:text="${teacher.lastName}"></td>
+                <td th:text="${teacher.firstName}"></td>
                 <td th:text="${teacher.email}"></td>
                 <td th:text="${teacher.active} ? 'Yes' : 'No'"></td>
                 <td th:text="${teacher.confirmed} ? 'Yes' : 'No'"></td>

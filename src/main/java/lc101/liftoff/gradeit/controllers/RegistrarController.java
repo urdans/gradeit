@@ -54,9 +54,9 @@ public class RegistrarController {
         Iterable<Student> filteredStudentList;
 
         if (groupForm.getGroupId() == 0) //first request
-            filteredStudentList = studentDao.findAll();
+            filteredStudentList = studentDao.findAllByOrderByLastNameAsc();
         else
-            filteredStudentList = studentDao.findAllByGroupId(groupForm.getGroupId());
+            filteredStudentList = studentDao.findAllByGroupIdOrderByLastName(groupForm.getGroupId());
 
         model.addAttribute("students", filteredStudentList);
         model.addAttribute("username", userSession.getSessionUserName(request));
@@ -178,7 +178,7 @@ public class RegistrarController {
         if (!registrarLoggedIn(request)) return "redirect:/";
 
         Iterable<Teacher> teacherList;
-        teacherList = teacherDao.findAll();
+        teacherList = teacherDao.findAllByOrderByLastName();
         model.addAttribute("teachers", teacherList);
         model.addAttribute("username", userSession.getSessionUserName(request));
         return "registrarteachers";
@@ -300,13 +300,11 @@ public class RegistrarController {
     public String registrarGroupsApplyFilter(Model model, HttpServletRequest request, @ModelAttribute() @Valid GroupForm groupForm) {
         return registrarGroups(model, request, groupForm);
     }
+    /*todo
+    * put order in the data (order by) when presenting it all over*/
 
 
-    /*todo next
-     * implement the groups sub section
-     * */
-
-    /*todo (keep in mid the reference integrity when deleting). Maybe no need to delete, what is active for?
+    /*todo (keep in mind the reference integrity when deleting). Maybe no need to delete, what is active for?
      * implement student deletion
      * implement teacher deletion
      */
