@@ -20,5 +20,6 @@ WHERE
 			grouping.id = 1)
 	AS groupinggroups
     )
-    AND
+AND
     student.active = 1
+ORDER BY NAME

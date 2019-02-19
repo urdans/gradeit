@@ -3,4 +3,4 @@ SELECT
 	* #id, date(`date`), description, percentage
 FROM
 	`schedule`
-WHERE grouping_id = 5
+WHERE grouping_id = 1

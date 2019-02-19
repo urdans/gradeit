@@ -1,5 +1,6 @@
 package lc101.liftoff.gradeit.controllers;
 
+import lc101.liftoff.gradeit.models.Grade;
 import lc101.liftoff.gradeit.models.Schedule;
 import lc101.liftoff.gradeit.models.data.*;
 import lc101.liftoff.gradeit.models.forms.GroupSubjectPairForm;
@@ -31,6 +32,9 @@ public class TeacherController {
     @Autowired
     ScheduleDao scheduleDao;
 
+    @Autowired
+    GradeDao gradeDao;
+
     /*todo manage all the cases where there is no data yet, especially in the select elements in the html*/
     /*todo if an teacher or student user is not active, he must not be able to log in*/
 
@@ -48,13 +52,8 @@ public class TeacherController {
         groupSubjectPairForm.setGroupSubjectPairs(teacherDao.teacherGroupsAndSubjects(userSession.getUserId()));
         List<Schedule> schedules = scheduleDao.findAllByGroupingIdOrderByDateAsc(groupSubjectPairForm.getSelectedPair());
         model.addAttribute("schedules", schedules);
-
-        for(Schedule schedule: schedules) {
-            System.out.println(schedule.getId()+" "+schedule.getDate()+" "+schedule.getDescription()+" "+schedule.getPercentage()+" "+schedule.getGrouping());
-        }
-
         model.addAttribute("studentlist", new GroupingStudentsForm(
-                studentDao.getGroupingStudents(groupSubjectPairForm.getSelectedPair())).getStudentIdAndNameList());
+                studentDao.getGroupingStudents(groupSubjectPairForm.getSelectedPair()), schedules, gradeDao).getStudentIdAndNameList());
         model.addAttribute("username", userSession.getSessionUserName(request));
         return "teacherroster";
     }
@@ -64,8 +63,10 @@ public class TeacherController {
                                      @ModelAttribute @Valid GroupSubjectPairForm groupSubjectPairForm){
         return teacherRoster(model, request, groupSubjectPairForm);
     }
-/*todo all buttons to close/cancel should be consistently "Close" for local forms or "Cancel" for forms in other pages (or maybe "Back")
-*/
+
+    /*todo all buttons to close/cancel should be consistently "Close" for local forms or "Cancel" for forms in other pages (or maybe "Back")
+    */
+
     @RequestMapping(value = "schedules", method = RequestMethod.GET)
     public String teacherSchedules(Model model, HttpServletRequest request,
                                 @ModelAttribute @Valid GroupSubjectPairForm groupSubjectPairForm){
@@ -75,14 +76,6 @@ public class TeacherController {
         groupSubjectPairForm.setGroupSubjectPairs(teacherDao.teacherGroupsAndSubjects(userSession.getUserId()));
         List<Schedule> schedules = scheduleDao.findAllByGroupingIdOrderByDateAsc(groupSubjectPairForm.getSelectedPair());
         model.addAttribute("schedules", schedules);
-
-/*        for(Schedule schedule: schedules) {
-            System.out.println(schedule.getId()+" "+schedule.getDate()+" "+schedule.getDescription()+" "+schedule.getPercentage()+" "+schedule.getGrouping());
-        }*/
-
-/*        model.addAttribute("studentlist", new GroupingStudentsForm(
-                studentDao.getGroupingStudents(groupSubjectPairForm.getSelectedPair())).getStudentIdAndNameList());*/
-
         model.addAttribute("username", userSession.getSessionUserName(request));
         return "teacherschedules";
     }

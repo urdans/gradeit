@@ -42,29 +42,48 @@
     <div class="container">
         <table id="roster">
             <tr id="rowid-0">
-			    <th>Student name</th>
+			    <th>Student Name</th>
                 <th th:each="schedule : ${schedules}">
                     <div th:text="${schedule.description}"></div>
                     <div th:text="${#calendars.format(schedule.date,'MM/dd/yyyy')}"></div>
                     <div th:text="${schedule.percentage} + '%'"></div>
                 </th>
                 <th>Cumulative</th>
-                <!--                <th th:each="schedule : ${schedules}"
-                                    th:text="${schedule.description} + '<br/>' + ${#calendars.format(schedule.date,'MM/dd/yyyy')}"></th>-->
             </tr>
 
             <tr th:each="student : ${studentlist}" th:id="'rowid-' + ${student.studentId}">
-                <td th:text="${student.studentName}"></td>
+                <td><a th:text="${student.studentName}" href="#" th:id="'studentId-'+${student.studentId}"></a></td>
+                <td th:each="eval : ${student.gradeEvalPairs}" th:text="${eval.gradeValue} !=null ? ${eval.gradeValue}: '-'"
+                    th:id="'gradeId:'+${eval.gradeId}+'-scheduleId:'+${eval.scheduleId}">
+                </td>
             </tr>
         </table>
+        <span id="under-table-msg" hidden></span>
     </div>
-    <div class="container">
-        <button>Submit</button>
-        <button>Cancel</button>
+    <div id="student-grades-form" hidden>
+        <h3 id="student-grades-form-title"></h3>
+
+        <table id="grades-table">
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>%</th>
+                <th>Grade</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td id="totalperc"></td>
+                <td id="cum"></td>
+            </tr>
+        </table>
+        <button id="save-button">Save</button>
+        <button id="close-button">Close</button>
+        <br>
+        <span id="student-grades-form-msg" hidden></span>
     </div>
-	<div>
-		<span th:text="${errormsg}" th:class="Error">Default error message</span>
-	</div>
+
+
     <p th:text="${groupSubjectPairList}"></p>
     <div th:each="pair : ${groupSubjectPairList}">
         <p th:text="${pair}"></p>

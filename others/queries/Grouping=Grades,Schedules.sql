@@ -9,6 +9,7 @@ INNER JOIN
 ON
 	grade.schedule_id = `schedule`.id
 WHERE
-	grouping_id = 1
+	student_id = 4 # 12 #2
+    AND grouping_id = 1 #19
 #AND
-#	student_id = 1
+#	`schedule`.id = 13

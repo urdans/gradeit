@@ -15,8 +15,10 @@ import javax.servlet.http.HttpSession;
 public class UserSession {
     @Autowired
     private StudentDao studentDao;
+
     @Autowired
     private TeacherDao teacherDao;
+
     @Autowired
     private RegistrarDao registrarDao;
 

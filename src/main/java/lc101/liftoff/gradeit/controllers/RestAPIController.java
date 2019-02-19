@@ -2,15 +2,11 @@ package lc101.liftoff.gradeit.controllers;
 
 import lc101.liftoff.gradeit.models.*;
 import lc101.liftoff.gradeit.models.data.*;
-import lc101.liftoff.gradeit.models.forms.GroupingForm;
-import lc101.liftoff.gradeit.models.forms.MessageContainer;
-import lc101.liftoff.gradeit.models.forms.ScheduleForm;
-import lc101.liftoff.gradeit.models.forms.TeacherForm;
+import lc101.liftoff.gradeit.models.forms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 public class RestAPIController {
@@ -35,8 +31,14 @@ public class RestAPIController {
 	@Autowired
 	private ScheduleDao scheduleDao;
 
+	@Autowired
+	private GradeDao gradeDao;
+
+	@Autowired
+	private StudentDao studentDao;
+
 	//example: http://localhost:8080/api/getsubject?id=25
-	/*todo all methods in this api shoud return a messagecontainer object for better communication with the client side*/
+	/*todo all methods in this api should return a messagecontainer object for better communication with the client side*/
 	@GetMapping("/api/getsubject")
 	public Subject getSubjectById(@RequestParam(value = "id", defaultValue = "0") int id, HttpServletRequest request) {
 
@@ -275,5 +277,61 @@ public class RestAPIController {
 	}
 	/*todo
 	 * show message in js needs to be revised since it's getting rid of the spam enclosing element*/
+
+	@GetMapping("/api/getgrades")
+	public GradesForm getStudentGrades(@RequestParam(value = "groupingid", defaultValue = "0") int groupingId,
+	                                   @RequestParam(value = "studentid", defaultValue = "0") int studentId,
+	                                   HttpServletRequest request) {
+
+		if (!teacherController.teacherLoggedIn(request)) return null;
+
+		if (groupingId == 0 || studentId == 0) return null;
+
+		return new GradesForm(scheduleDao.getGradesByGroupingAndStudent(groupingId, studentId));
+	}
+
+	@PostMapping("/api/setgrades")
+	public MessageContainer setStudentGrades(@RequestBody StudentGradesForm studentGradesForm, HttpServletRequest request) {
+
+		if (!teacherController.teacherLoggedIn(request)) return new MessageContainer("Unauthorized!", true);
+
+		Student student = studentDao.findById(studentGradesForm.studentId).orElse(null);
+
+		if (student == null)
+			return new MessageContainer("Student id: " + studentGradesForm.studentId + " not found!. Nothing saved.", true);
+
+		if (studentGradesForm.gradeList.size() == 0) return new MessageContainer("Nothing to save!", true);
+
+		for (StudentGrade grade : studentGradesForm.gradeList) {
+
+			Schedule schedule = scheduleDao.findById(grade.scheduleId).orElse(null);
+
+			if (schedule == null) return new MessageContainer("Schedule id: " + grade.scheduleId + " not found!. Some grades might " +
+					"have been saved.", true);
+
+			if (grade.gradeId == 0 && grade.gradeValue != "") {
+				gradeDao.save(new Grade(schedule, student, Double.parseDouble(grade.gradeValue)));
+			} else if (grade.gradeId != 0) { //existing grade
+				Grade existingGrade = gradeDao.findById(grade.gradeId).orElse(null);
+
+				if (existingGrade == null) return new MessageContainer("Grade id:" + grade.gradeId +
+						" not found!. Some grades might have been saved.", true);
+
+				if (grade.gradeValue == "") {//grade must be deleted
+					try {
+						gradeDao.delete(existingGrade);
+					} catch (Exception e) {
+						return new MessageContainer("Can not delete the existing grade id: " + grade.gradeId + " !", true);
+					}
+				} else {//potentially modified value
+					existingGrade.setValue(Double.parseDouble(grade.gradeValue));
+					gradeDao.save(existingGrade);
+				}
+			}
+		}
+		MessageContainer messageContainer = new MessageContainer("Student grades saved!", false);
+		messageContainer.id = 0;
+		return messageContainer;
+	}
 }
 

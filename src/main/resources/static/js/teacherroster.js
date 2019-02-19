@@ -1,14 +1,10 @@
 document.onload = setup();
 
 
-function setup(){
-/*     forEachRemove(function(element){ element.onclick = removeGrouping; })
-    document.getElementById('add-group').onclick = addGroup;
-    document.getElementById('edit-group').onclick = editGroup;
-    document.getElementById('delete-group').onclick = deleteGroup;
-    document.getElementById('a-link-add').onclick = addGrouping;
-    document.getElementById('group-cancel-button').onclick = groupCancel;
-    document.getElementById('cancelgrouping-button').onclick = groupingCancel; */
+function setup() {
+    forEachIdTag("studentId-", function(element){ element.onclick = editEvaluations; })
+    document.getElementById('save-button').onclick = saveGrades;
+    document.getElementById('close-button').onclick = closeForm;
     document.getElementById('selectedPair').onchange = updatePage;
     setUpTitle();
 }
@@ -23,136 +19,96 @@ function setUpTitle() {
     document.getElementById("roster-title").innerText = s1[0] + " roster for " + s1[1];
 }
 
-/* 
-function addGroup(e) {
-    document.getElementById("group-form-title").innerText = "Adding a new group name";
-    document.getElementById("group-name-box").value = "";
-    document.getElementById("action-button").innerText = "Add";
-    setUpGroupForm(true);
-    document.getElementById("action-button").onclick = function() {
-        var newGroupName = document.getElementById("group-name-box").value;
-        if(newGroupName.length < 1) {
-            showMessage("group-msg", "Group name can not be empty!");
-            return;
-        }
-        callApi('POST', 'http://localhost:8080/api/addgroup', function (dataReturned) {
-            if(dataReturned) {
-                showMessage("group-msg", 'Group name "' + newGroupName + '" added!');
-                var groupSelector = document.getElementById("groupId");
-                groupSelector.options[groupSelector.options.length] = new Option(newGroupName, dataReturned);
-            }
-            else showMessage("group-msg", "Unknown error. Group name not added!");
-            document.getElementById("group-name-box").value = "";
-            document.getElementById("group-name-box").focus();
-        }, {"id" : 0, "name": newGroupName});
-    }
-}
-
-function editGroup(e) {
-    document.getElementById("group-form-title").innerText = "Editing an existing group name";
-    document.getElementById("group-name-box").value = document.getElementById("groupId").selectedOptions[0].innerText;
-    document.getElementById("action-button").innerText = "Save";
-    setUpGroupForm(true);
-    document.getElementById("action-button").onclick = function() {
-        var groupName = document.getElementById("group-name-box").value;
-        var groupId = document.getElementById("groupId").value;
-        if(groupName.length < 1) {
-            showMessage("group-msg", "Group name can not be empty!");
-            return;
-        }
-        callApi('PUT', 'http://localhost:8080/api/updategroup', function (dataReturned) {
-            if(dataReturned) {
-                showMessage("delete-group-msg", "Group name saved!");
-                var selectedGroup = document.getElementById("groupId").selectedOptions[0];
-                selectedGroup.innerText = groupName;
-            }
-            else showMessage("delete-group-msg", "Unknown error. Group name not saved!");
-            setUpGroupForm(false);
-         }, {"id" : groupId, "name": groupName});
-    }
-}
-
-function deleteGroup(e) {
-    var selectedGroup = document.getElementById("groupId").selectedOptions[0];
-    groupName = selectedGroup.innerText;
-    groupId = selectedGroup.value;
-    callApi('DELETE', 'http://localhost:8080/api/deletegroup', function (dataReturned) {
-        showMessage("delete-group-msg", dataReturned.message);
-        if(!dataReturned.isError) {
-            var groupSelector = document.getElementById("groupId");
-            groupSelector.remove(groupSelector.selectedIndex);
-            updatePage(null);
-        }
-    }, {"id" : groupId, "name": groupName});
-}
-
-function addGrouping(e) {
-    document.getElementById("subjects").selectedIndex = 0;
-    document.getElementById("teachers").selectedIndex = 0;
-    setUpGroupingForm(true);
-    document.getElementById("addgrouping-button").onclick = function() {
-        var groupId = document.getElementById("groupId").selectedOptions[0].value;
-        var subjectId = document.getElementById("subjects").selectedOptions[0].value;
-        var teacherId = document.getElementById("teachers").selectedOptions[0].value;
-        var subject = document.getElementById("subjects").selectedOptions[0].innerText;
-        var teacher = document.getElementById("teachers").selectedOptions[0].innerText;
-        if(subjectId == 0 || teacherId == 0) {
-            showMessage("grouping-msg", "Please select one subject and one teacher!");
-            return;
-        }
-        console.log("group id: " + groupId + "    subjectId: " + subjectId + "    teacherId: " + teacherId);
-        console.log("Subject: " + subject + "      Teacher: " + teacher);
-        callApi('POST', 'http://localhost:8080/api/addgrouping', function (dataReturned) {
-            showMessage("grouping-msg", dataReturned.message);
-            if(!dataReturned.isError) {
-                //add the pair to the table
-                var table = document.getElementById("grouping-table");
+function editEvaluations(e) {
+    var groupingId = document.getElementById("selectedPair").selectedOptions[0].value;
+    var studentId = extractIdNumber(e.target.id);
+    callApi('GET', 'http://localhost:8080/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
+        if(dataReturned) {
+            var table = document.getElementById("grades-table");
+            var L = dataReturned.grades.length;
+            var cum = 0.0;
+            var totalperc = 0;
+            for(i = 0; i < L; i++){
                 var row = table.insertRow(table.rows.length - 1);
-                row.insertCell(0).innerText = subject;
-                row.insertCell(1).innerText = teacher;
-                row.insertCell(2).innerHTML = '<a id="removeId-' + dataReturned.id + '" href="#" hidden>Remove</a>';
-                document.getElementById("removeId-" + dataReturned.id).onclick = removeGrouping;
+                row.insertCell(0).innerText = getJavaDate(dataReturned.grades[i].date);
+                row.insertCell(1).innerText = dataReturned.grades[i].description;
+                var percentage = parseFloat(dataReturned.grades[i].percentage);
+                row.insertCell(2).innerText =  percentage + '%';
+                var gradeValue = "";
+                if(dataReturned.grades[i].gradeValue != null) gradeValue = parseFloat(dataReturned.grades[i].gradeValue);
+                var gradeId = '0';
+                if(dataReturned.grades[i].gradeId != null) gradeId = dataReturned.grades[i].gradeId;
+                var scheduleId = dataReturned.grades[i].scheduleId;
+                row.insertCell(3).innerHTML = '<input id="gradeId-' + gradeId + '" type="number" value="' + gradeValue + '" data-scheduleId="' + scheduleId + '"></input>';
+                cum = cum + gradeValue*percentage*0.01;
+                totalperc = totalperc + percentage;
             }
-        }, {"group_id" : groupId, "subject_id": subjectId, "teacher_id": teacherId});
-        document.getElementById("subjects").selectedIndex = 0;
-        document.getElementById("teachers").selectedIndex = 0;
-    } 
- }
-
-function removeGrouping(e) {
-    groupingIdToDeleteId = parseInt(String(e.target.id).substr(9));
-    console.log("groupingIdToDeleteId: " + groupingIdToDeleteId);
-    callApi('DELETE', 'http://localhost:8080/api/deletegrouping', function (dataReturned) {
-        showMessage("outer-grouping-msg", dataReturned.message);
-        if(!dataReturned.isError) {
-            //remove the pair to the table
-            document.getElementById("rowid-" + groupingIdToDeleteId).outerHTML = "";
+            document.getElementById("totalperc").innerText = totalperc + "%";
+            document.getElementById("cum").innerText = cum;
+            var title = document.getElementById("student-grades-form-title");
+            title.setAttribute("data-studentId", studentId);
+            title.innerText = "Grades for student: " + document.getElementById('studentId-' + studentId).innerText;
+            forEachIdTag("gradeId-", function(element){ element.onchange = updateCumulative; }, "INPUT");
+            setUpEditForm(true);
         }
-    }, {"group_id" : groupingIdToDeleteId, "subject_id": "", "teacher_id": ""});
+    });
 }
 
-function groupCancel() {
-    setUpGroupForm(false);
+function updateCumulative(e){
+    var rows = document.getElementById("grades-table").rows;
+    var L = rows.length;
+    var L = rows.length;
+    cum = 0;
+    for(i = 1; i < L - 1; i++){
+        var percentage = parseFloat(rows[i].cells[2].innerText);
+        var input = rows[i].cells[3].getElementsByTagName("INPUT")[0];
+        var gradeValue = parseFloat(input.value);
+        cum = cum + gradeValue*percentage*0.01;
+    }
+    document.getElementById("cum").innerText = cum;
 }
 
-function groupingCancel() {
-    setUpGroupingForm(false);
+function saveGrades() {
+    var studentId = parseInt(document.getElementById("student-grades-form-title").getAttribute("data-studentId"));
+    var rows = document.getElementById("grades-table").rows;
+    var L = rows.length;
+    var gradeList = [];
+    for(i = 1; i < L - 1; i++){
+        var input = rows[i].cells[3].getElementsByTagName("INPUT")[0];
+        var gradeValue = input.value;//needed to be string
+        var gradeId = extractIdNumber(input.getAttribute("Id"));//needed to be string
+        var scheduleId = parseInt(input.getAttribute("data-scheduleId"));
+        console.log(gradeValue + "\t\t\t" + gradeId);
+        var studentGrade = {"gradeValue":gradeValue, "gradeId":gradeId, "scheduleId":scheduleId};
+        gradeList.push(studentGrade);
+    }
+    var studentGrades = {"studentId":studentId, "gradeList":gradeList}
+    callApi('POST', 'http://localhost:8080/api/setgrades', function (dataReturned) {
+        showMessage("student-grades-form-msg", dataReturned.message);
+        if(!dataReturned.isError) {
+            location.reload();
+        }
+    }, studentGrades);
 }
 
-function setUpGroupForm(active) {
-    document.getElementById("group-form").hidden = !active;
-    document.getElementById("group-option-menu").hidden = active;
-    grayer("groupForm", active);
-    forEachRemove(function(element){ element.hidden = active; })  
-    document.getElementById("a-link-add").hidden = active;  
+function closeForm() {
+    setUpEditForm(false);
+    var table = document.getElementById("grades-table");
+    while(table.rows.length > 2) table.deleteRow(1);
 }
 
-function setUpGroupingForm(active) {
-    document.getElementById("add-form").hidden = !active;
-    document.getElementById("group-option-menu").hidden = active;
-    grayer("groupForm", active);
-    forEachRemove(function(element){ element.hidden = active; })  
-    document.getElementById("a-link-add").hidden = active; 
+function setUpEditForm(active) {
+    grayer("groupSubjectPairForm", active);
+    forEachIdTag("studentId-", function(element){
+        if(active){
+            element.onclick = null;
+            element.removeAttribute("href");
+        }else{
+            element.onclick = editEvaluations;
+            element.setAttribute("href","#");
+        }
+    })
+    document.getElementById("student-grades-form").hidden = !active;
 }
 
 function showMessage(elementId, message) {
@@ -170,15 +126,20 @@ function grayer(formId, yesNo) {
     for(var i=0; i<f.length; i++) f[i].disabled = yesNo;
 }
 
-function forEachRemove(doForEach){
-    var tbodyR = document.getElementById("grouping-list");
-    var aList = tbodyR.getElementsByTagName("A");
-    var L = aList.length;
+function forEachIdTag(idTag, doForEach, tag="A"){
+    //Execute a doForEach function on each "A" (link) element in the entire document which id tag starts with the string idTag
+    var elementList = document.getElementsByTagName(tag);
+    var L = elementList.length;
     for(i = 0; i < L; i++){
-        if(aList[i].id.startsWith("removeId-")) {
-            doForEach(aList[i]);
+        if(elementList[i].id.startsWith(idTag)) {
+            doForEach(elementList[i]);
         }
     }
+}
+
+function extractIdNumber(idTag){
+    var tag = idTag.split('-');
+    return parseInt(tag[tag.length-1]);
 }
 
 function callApi(method, endpoint, callback, data = null){
@@ -196,5 +157,11 @@ function callApi(method, endpoint, callback, data = null){
     }
     else request.send();
 }
- */
+
+function getJavaDate(date) {
+    //converts from 2019-11-21 to 11/21/2019
+    var ymd = date.split("-");
+    return [ymd[1], ymd[2], ymd[0]].join('/');
+}
+
 
