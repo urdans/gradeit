@@ -62,7 +62,10 @@ function updateCumulative(e){
     for(i = 1; i < L - 1; i++){
         var percentage = parseFloat(rows[i].cells[2].innerText);
         var input = rows[i].cells[3].getElementsByTagName("INPUT")[0];
-        var gradeValue = parseFloat(input.value);
+        var gradeValue = 0;
+        if(input.value == "") gradeValue = 0.0;
+        else gradeValue = parseFloat(input.value);
+            
         cum = cum + gradeValue*percentage*0.01;
     }
     document.getElementById("cum").innerText = cum;

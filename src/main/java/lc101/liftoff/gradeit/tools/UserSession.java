@@ -122,6 +122,15 @@ public class UserSession {
         }
     }
 
+    public void updateSessionUserName(HttpServletRequest aRequest, String newUserName) {
+        session = request.getSession(false);
+        if (session != null) {
+            userName = newUserName;
+            session.removeAttribute("username");
+            session.setAttribute("username", String.valueOf(userName));
+        }
+    }
+
     public boolean isStudent() {
         return userType == UserType.STUDENT;
     }
@@ -140,6 +149,27 @@ public class UserSession {
 
     public int getUserId() {
         return userId;
+    }
+
+    public Teacher getUserAsTeacher(){
+        if(userType != UserType.TEACHER) throw new RuntimeException("The logged user is not a teacher!");
+        Teacher teacher = teacherDao.findById(userId).orElse(null);
+        if(teacher == null) throw new RuntimeException("Can't find the logged tearcher user!");
+        return teacher;
+    }
+
+    public Student getUserAsStudent(){
+        if(userType != UserType.STUDENT) throw new RuntimeException("The logged user is not a student!");
+        Student student = studentDao.findById(userId).orElse(null);
+        if(student == null) throw new RuntimeException("Can't find the logged student user!");
+        return student;
+    }
+
+    public Registrar getUserAsRegistrar(){
+        if(userType != UserType.REGISTRAR) throw new RuntimeException("The logged user is not a registrar!");
+        Registrar registrar = registrarDao.findById(userId).orElse(null);
+        if(registrar == null) throw new RuntimeException("Can't find the logged registrar user!");
+        return registrar;
     }
 
     private boolean userExistById(CrudRepository userDao, int id) {
@@ -161,4 +191,6 @@ public class UserSession {
         }
         return false;
     }
+
+
 }

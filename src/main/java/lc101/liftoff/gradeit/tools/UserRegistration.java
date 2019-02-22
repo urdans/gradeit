@@ -1,5 +1,6 @@
 package lc101.liftoff.gradeit.tools;
 
+import lc101.liftoff.gradeit.models.Registrar;
 import lc101.liftoff.gradeit.models.Student;
 import lc101.liftoff.gradeit.models.Teacher;
 import lc101.liftoff.gradeit.models.User;
@@ -63,7 +64,6 @@ public class UserRegistration {
 
     public boolean registerNewUser(String userName, String Password) {
         int ut;
-        /*done refactor using User interface semantics*/
         if(getUserType() == UserType.STUDENT) {
             if (_registerNewUser(studentDao, userName, Password)) ut = 1;
             else return false;
@@ -83,6 +83,25 @@ public class UserRegistration {
             return userType;
         }
         throw new RuntimeException("userInfoSet is not set. You must call emailIsInRecords() before using getUserType()");
+    }
+
+    public boolean isUserNameAvailable(User user, String newUserName) {
+        User user2;
+        user2 = teacherDao.findFirstByUserName(newUserName);
+
+        if (user2 == null) {
+            user2 = studentDao.findFirstByUserName(newUserName);
+            if (user2 == null) {
+                user2 = registrarDao.findFirstByUserName(newUserName);
+                if (user2 == null) return true;
+            }
+        }
+
+        if (user2.getClass() == user.getClass()) {
+            return user2.getId() == user.getId();
+        }
+
+        return false;
     }
 
     /*done refactor the use of optional where used*/

@@ -9,33 +9,58 @@
 </head>
 <body>
     <nav id="nav1" class="nav nav-pills navbar navbar-dark bg-dark justify-content-end">
-<!--         <a class="nav-link disabled" onclick="clearActive(event)" href="#">Stats</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Announcements</a> -->
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Roster</a>
-        <a class="nav-link disabled" onclick="clearActive(event)" href="#">Schedules</a>
-        <a class="nav-link" onclick="clearActive(event)" href="#">Tadeo Jones</a>
+        <a class="nav-link" href="/teacher/roster">Roster</a>
+        <a class="nav-link" href="/teacher/schedules">Schedules</a>
+        <a class="nav-link" href="#" th:text="${username}"></a>
         <div>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Profile</a>
-            <a class="nav-link" onclick="clearActive(event)" href="#">Log out</a>
-        </div>        
+            <a class="nav-link" href="/teacher/profile">Profile</a>
+            <a class="nav-link" href="/logout">Log out</a>
+        </div>
     </nav>
     <div>
         <h1>Teacher Profile</h1>
     </div>
     <div>
-        <form method="post">
-            First name: <input type="text" name="firstname"><br>
-            Last name: <input type="text" name="lastname"><br>
-            Email address: <input type="text" name="email"><br>
-            User name: <input type="text" name="username"><br>
-            Password: <input type="password" name="password"><br>
-            Retype password: <input type="password" name="password2"><br>
-            Address: <input type="text" name="address"><br>
-            Phone number: <input type="text" name="phonenumber"><br>
+        <form method="post" th:object="${userProfileForm}">
+            First name:
+            <input th:field="*{firstName}"><br>
+            <small th:errors="*{firstName}"></small><br>
+
+            Last name:
+            <input th:field="*{lastName}"><br>
+            <small th:errors="*{lastName}"></small><br>
+
+            Email address:
+            <input th:field="*{email}"><br>
+            <small th:errors="*{email}"></small><br>
+
+            User name:
+            <input th:field="*{userName}"><br>
+            <small th:errors="*{userName}"></small><br>
+
+<!--            Current password:
+            <input th:field="*{currentPassword}" type="password"><br>
+            <small th:errors="*{currentPassword}"></small><br>-->
+
+            Password:
+            <input th:field="*{password}" type="password"><br>
+            <small th:errors="*{password}"></small><br>
+
+            Retype password:
+            <input th:field="*{password2}" type="password"><br>
+            <small th:errors="*{password2}"></small><br>
+
+            Phone number:
+            <input th:field="*{phoneNumber}" type="tel"><br><br>
+
+            <input type="hidden" th:field="*{id}">
             <input type="submit" value="Save">
+            <input type="button" onclick="location.href='/teacher/roster';" value="Back" />
         </form>
-        <span th:text="${errormsg}" th:class="Error">Default error message</span>
+        <p th:text="${msg}" th:class="Error">Default error message</p>
     </div>
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

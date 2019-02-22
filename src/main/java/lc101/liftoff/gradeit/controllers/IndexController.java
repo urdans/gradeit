@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
     @Autowired
     private UserSession userSession;
+
     @Autowired
     private UserRegistration userRegistration;
 
@@ -26,7 +27,7 @@ public class IndexController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String logIn(HttpServletRequest request) {
-        /* if the session contains info about a logged user, redirect to /Student, /teacher or /registrar
+        /* if the session contains information about a logged user, redirect to /Student, /teacher or /registrar
          accordingly, otherwise render the log in page */
         if (userSession.decodeSession(request)) {
             if (userSession.isStudent())
@@ -36,10 +37,6 @@ public class IndexController {
             if (userSession.isRegistrar())
                 return "redirect:/registrar/students"; //home for registrar users
         }
-        /*info
-         * Use this place to test outputs*/
-//        System.out.println(HashTools.hashAndSaltPassword("1234"));
-
         return "login";
     }
 
@@ -69,7 +66,6 @@ public class IndexController {
     public String registerDo(Model model, HttpServletRequest request, @RequestParam String email,
                              @RequestParam String username, @RequestParam String password1,
                              @RequestParam String password2) {
-        /*Done html response must include all the fields but password */
         model.addAttribute("username", username);
         model.addAttribute("email", email);
         if (email.equals("") || username.equals("") || password1.equals("") || password2.equals("")) {

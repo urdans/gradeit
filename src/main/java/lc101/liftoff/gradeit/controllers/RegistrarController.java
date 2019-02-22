@@ -2,10 +2,13 @@ package lc101.liftoff.gradeit.controllers;
 
 
 import lc101.liftoff.gradeit.models.Group;
+import lc101.liftoff.gradeit.models.Registrar;
 import lc101.liftoff.gradeit.models.Student;
 import lc101.liftoff.gradeit.models.Teacher;
 import lc101.liftoff.gradeit.models.data.*;
 import lc101.liftoff.gradeit.models.forms.GroupForm;
+import lc101.liftoff.gradeit.models.forms.UserProfileForm;
+import lc101.liftoff.gradeit.tools.UserRegistration;
 import lc101.liftoff.gradeit.tools.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +22,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import static lc101.liftoff.gradeit.tools.HashTools.hashAndSaltPassword;
+
 
 @Controller
 @RequestMapping("registrar")
 public class RegistrarController {
+    @Autowired
+    private UserRegistration userRegistration;
+
     @Autowired
     private UserSession userSession;
 
@@ -40,6 +48,9 @@ public class RegistrarController {
 
     @Autowired
     private SubjectDao subjectDao;
+
+    @Autowired
+    private RegistrarDao registrarDao;
 
     public boolean registrarLoggedIn(HttpServletRequest request) {
         return (userSession.decodeSession(request)) & (userSession.isRegistrar());
@@ -209,7 +220,7 @@ public class RegistrarController {
             return "registrarteacheredit";
         }
 
-        teacherDao.save(newTeacher);
+        teacherDao. save(newTeacher);
         model.addAttribute(new Teacher());
         return "registrarteacheredit";
     }
@@ -300,6 +311,62 @@ public class RegistrarController {
     public String registrarGroupsApplyFilter(Model model, HttpServletRequest request, @ModelAttribute() @Valid GroupForm groupForm) {
         return registrarGroups(model, request, groupForm);
     }
+
+    @RequestMapping(value = "profile", method = RequestMethod.GET)
+    public String registrarProfile(Model model, HttpServletRequest request, @ModelAttribute @Valid UserProfileForm userProfileForm,
+                                 Errors errors) {
+
+        if (!registrarLoggedIn(request)) return "redirect:/";
+
+        if (request.getMethod().equals("GET")) { //first time calling
+            userProfileForm.setUserData(userSession.getUserAsRegistrar());
+        } else if (!errors.hasErrors()) {//it's a POST
+
+            Registrar registrar = registrarDao.findById(userProfileForm.getId()).orElse(null);
+
+            if (registrar == null) {
+
+                model.addAttribute("msg", "Registrar not found!");
+
+            } else if (userProfileForm.getId() != userSession.getUserId()) {
+
+                model.addAttribute("msg", "No hacking permitted!");
+
+            } else if (!userProfileForm.getPassword().equals(userProfileForm.getPassword2())) {
+
+                errors.rejectValue("password", "0", "Passwords don't match. Please try again!");
+                errors.rejectValue("password2", "1", "Passwords don't match. Please try again!");
+
+            } else if (!userRegistration.isUserNameAvailable(registrar, userProfileForm.getUserName())) {
+
+                errors.rejectValue("userName", "3", "This user name is not available.");
+
+            } else {
+                registrar.setUserName(userProfileForm.getUserName());
+                registrar.setPassword(hashAndSaltPassword(userProfileForm.getPassword()));
+                registrarDao.save(registrar);
+                model.addAttribute("msg", "Profile was properly updated!");
+                userSession.updateSessionUserName(request, userProfileForm.getUserName());
+            }
+        }
+        model.addAttribute("username", userSession.getSessionUserName(request));
+        return "registrarprofile";
+    }
+
+    @RequestMapping(value = "profile", method = RequestMethod.POST)
+    public String registrarUpdateProfile(Model model, HttpServletRequest request,
+                                       @ModelAttribute @Valid UserProfileForm userProfileForm, Errors errors) {
+        return registrarProfile(model, request, userProfileForm, errors);
+    }
+
+
+
+
+
+
+
+
+
     /*todo
     * put order in the data (order by) when presenting it all over*/
 

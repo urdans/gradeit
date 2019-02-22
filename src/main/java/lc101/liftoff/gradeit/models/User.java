@@ -1,30 +1,44 @@
 package lc101.liftoff.gradeit.models;
 
 public interface User {
-    int getId();
+	int getId();
 
-    //    String getFirstName();
-    //    String getLastName();
-    default String getEmail() {
-        return null;
-    }
+	default String getFirstName() {
+		return "";
+	}
 
-    String getUserName();
+	default String getLastName() {
+		return "";
+	}
 
-    String getPassword();
+	default String getEmail() {
+		return null;
+	}
 
-    default boolean isActive() {
-        return false;
-    }
+	String getUserName();
 
-    default boolean isConfirmed() {
-        return false;
-    }
+	String getPassword();
 
-    //    String getPhoneNumber();
-    void setUserName(String userName);
+	default String getAddress() {
+		return "";
+	}
 
-    void setPassword(String password);
+	default String getPhoneNumber() {
+		return "";
+	}
 
-    default void setConfirmed(boolean confirmed) {}
+	default boolean isActive() {
+		return false;
+	}
+
+	default boolean isConfirmed() {
+		return false;
+	}
+
+	void setUserName(String userName);
+
+	void setPassword(String password);
+
+	default void setConfirmed(boolean confirmed) {
+	}
 }

@@ -42,4 +42,6 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
             "ORDER BY groupname, subjectname"
             ,nativeQuery = true)
     List<IGroupSubjectPair> teacherGroupsAndSubjects(int teacherId);
+
+    Teacher findFirstByUserName(String userName);
 }

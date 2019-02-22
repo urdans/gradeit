@@ -1,16 +1,11 @@
 package lc101.liftoff.gradeit.models.data;
 
-import lc101.liftoff.gradeit.models.Group;
 import lc101.liftoff.gradeit.models.Student;
-import lc101.liftoff.gradeit.models.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.orm.jpa.EntityManagerFactoryAccessor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository("StudentDao")
@@ -54,4 +49,6 @@ public interface StudentDao extends CrudRepository<Student, Integer> {
             "ORDER BY name"
             ,nativeQuery = true)
     List<IStudentIdAndName> getGroupingStudents(int groupingId);
+
+    Student findFirstByUserName(String userName);
 }
