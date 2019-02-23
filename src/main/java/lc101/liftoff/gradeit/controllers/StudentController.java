@@ -1,7 +1,11 @@
 package lc101.liftoff.gradeit.controllers;
 
+import lc101.liftoff.gradeit.models.Grouping;
 import lc101.liftoff.gradeit.models.Student;
+import lc101.liftoff.gradeit.models.data.GroupingDao;
+import lc101.liftoff.gradeit.models.data.ScheduleDao;
 import lc101.liftoff.gradeit.models.data.StudentDao;
+import lc101.liftoff.gradeit.models.forms.DashboardForm;
 import lc101.liftoff.gradeit.models.forms.UserProfileForm;
 import lc101.liftoff.gradeit.tools.UserRegistration;
 import lc101.liftoff.gradeit.tools.UserSession;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static lc101.liftoff.gradeit.tools.HashTools.hashAndSaltPassword;
 
@@ -30,6 +36,12 @@ public class StudentController {
 	@Autowired
 	StudentDao studentDao;
 
+	@Autowired
+	GroupingDao groupingDao;
+
+	@Autowired
+	ScheduleDao scheduleDao;
+
 	public boolean studentLoggedIn(HttpServletRequest request) {
 		return (userSession.decodeSession(request)) & (userSession.isStudent());
 	}
@@ -39,8 +51,12 @@ public class StudentController {
 
 		if (!studentLoggedIn(request)) return "redirect:/";
 
+		model.addAttribute("dashboardItemList", new DashboardForm(userSession.getUserId(), studentDao, groupingDao, scheduleDao).dashboardItemList);
+
+		model.addAttribute("sid", userSession.getUserId());
 		model.addAttribute("username", userSession.getSessionUserName(request));
-		return "studentgrades";
+		model.addAttribute("title", "GradeIt-grades");
+		return "student/studentgrades";
 	}
 
 	@RequestMapping(value = "profile", method = RequestMethod.GET)
@@ -90,7 +106,8 @@ public class StudentController {
 			}
 		}
 		model.addAttribute("username", userSession.getSessionUserName(request));
-		return "studentprofile";
+		model.addAttribute("title", "GradeIt-profile");
+		return "student/studentprofile";
 	}
 
 	@RequestMapping(value = "profile", method = RequestMethod.POST)

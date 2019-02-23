@@ -62,6 +62,8 @@ public class UserSession {
             if (id <= 0)
                 return false;
 
+            userId = id;
+
             return userExistById(studentDao, id) || userExistById(teacherDao, id) || userExistById(registrarDao, id);
         } catch (Exception e) {
             return false;

@@ -15,10 +15,11 @@ public interface GroupingDao extends CrudRepository<Grouping, Integer> {
     //public List<Grouping> findAllByGroupId(int id);
     //public List<Grouping> findAllByGroup_Id(int id);
 
-    @Query(value = "SELECT * FROM GROUPING WHERE GROUP_ID = ?1", nativeQuery = true)
+    //@Query(value = "SELECT * FROM GROUPING WHERE GROUP_ID = ?1", nativeQuery = true)
     List<Grouping> findAllByGroupId(int groupId);
 
 //    @Query(value = "SELECT COUNT(id) FROM grouping WHERE subject_id = ?1 AND group_id = ?2", nativeQuery = true)
 //    int subjectsInGroup(int subjectId, int groupId);
     int countBySubjectIdAndGroupId(int subjectId, int groupId);
+
 }

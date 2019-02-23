@@ -3,6 +3,8 @@ package lc101.liftoff.gradeit.controllers;
 import lc101.liftoff.gradeit.models.*;
 import lc101.liftoff.gradeit.models.data.*;
 import lc101.liftoff.gradeit.models.forms.*;
+import lc101.liftoff.gradeit.tools.UserSession;
+import lc101.liftoff.gradeit.tools.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ public class RestAPIController {
 
 	@Autowired
 	private TeacherController teacherController;
+
+	@Autowired
+	private StudentController studentController;
 
 	@Autowired
 	private GroupDao groupDao;
@@ -36,6 +41,9 @@ public class RestAPIController {
 
 	@Autowired
 	private StudentDao studentDao;
+
+	@Autowired
+	UserSession userSession;
 
 	//example: http://localhost:8080/api/getsubject?id=25
 	/*todo all methods in this api should return a messagecontainer object for better communication with the client side*/
@@ -283,9 +291,11 @@ public class RestAPIController {
 	                                   @RequestParam(value = "studentid", defaultValue = "0") int studentId,
 	                                   HttpServletRequest request) {
 
-		if (!teacherController.teacherLoggedIn(request)) return null;
+		if (!teacherController.teacherLoggedIn(request) && !studentController.studentLoggedIn(request)) return null;
 
 		if (groupingId == 0 || studentId == 0) return null;
+
+		if (userSession.getUserType() == UserType.STUDENT && studentId != userSession.getUserId()) return null;
 
 		return new GradesForm(scheduleDao.getGradesByGroupingAndStudent(groupingId, studentId));
 	}

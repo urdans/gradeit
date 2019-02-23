@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+
+<body>
+    <nav th:fragment="nav" id="nav1" class="nav nav-pills navbar bg-dark justify-content-end">
+        <div class="btn-group">
+            <!--<button type="button" class="btn btn-primary" onclick="location.href='/student/grades';">Grades</button>-->
+            <button type="button" class="btn btn-primary">Grades</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" th:text="${username}"></button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/student/profile">Profile</a>
+                    <a class="dropdown-item" href="/logout">Log out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div th:fragment="errormsg" th:if="${errormsg}" class="col-sm-4 px-0 ">
+        <div class="alert alert-danger alert-dismissible my-2 py-3">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <span th:text="${errormsg}" th:class="Error">Default error message</span>
+        </div>
+    </div>
+</body>
+</html>

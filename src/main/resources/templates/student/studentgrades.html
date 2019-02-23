@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:replace="studentfragments :: head"></head>
+
+<body>
+    <div class="container-fluid">
+        <nav th:replace="studentfragments :: nav"></nav>
+
+        <div class="container-fluid">
+            <div>
+                <h1 class="text-center" id="sid" th:data-sid="${sid}">Dashboard</h1>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover nav-pills" id="dashboard">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Subject</th>
+                            <th>Last Eval.</th>
+                            <th>Description</th>
+                            <th>%</th>
+                            <th>Grade</th>
+                            <th>Cumulative</th>
+                        </tr>
+                    </thead>
+                    <tr th:each="dashboardItem : ${dashboardItemList}" th:id="'rowid-' + ${dashboardItem.groupingId}">
+                        <td><a th:text="${dashboardItem.subjectName}" href="#" th:id="'groupingId-'+${dashboardItem.groupingId}"></a></td>
+                        <td th:text="${dashboardItem.lastEval}"></td>
+                        <td th:text="${dashboardItem.description}"></td>
+                        <td th:text="${dashboardItem.percentage}+'%'"></td>
+                        <td th:text="${dashboardItem.gradeValue}"></td>
+                        <td th:text="${dashboardItem.cumulative}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="student-grades-form" hidden>
+            <h2 class="text-center">Details</h2>
+            <h3 class="text-center" id="detail-subjectname"></h3>
+            <table id="grades-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>%</th>
+                    <th>Grade</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Totals:</td>
+                    <td id="totalperc"></td>
+                    <td id="cum"></td>
+                </tr>
+            </table>
+            <br>
+        </div>
+        <!--<div class="container-fluid">
+            <h2 class="text-center">Details</h2>
+            <h4 class="text-center"><span id="detailedsubjectname">Literature</span> evaluation plan</h4>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th class="text-right">%</th>
+                        <th class="text-right">Grade</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>01/05/2019</td>
+                        <td>Assignment</td>
+                        <td class="text-right">30%</td>
+                        <td class="text-right">100</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2019</td>
+                        <td>Assignment</td>
+                        <td class="text-right">30%</td>
+                        <td class="text-right">98</td>
+                    </tr>
+                    <tr>
+                        <td>01/19/2019</td>
+                        <td>Test</td>
+                        <td class="text-right">30%</td>
+                        <td class="text-right">95</td>
+                    </tr>
+                    <tr>
+                        <td>01/25/2019</td>
+                        <td>Participation</td>
+                        <td class="text-right">10%</td>
+                        <td class="text-right">100</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">100%</td>
+                        <td class="text-right">98.75</td>
+                    </tr>
+                </table>
+            </div>
+        </div>-->
+    </div>
+
+    <script type="text/javascript" th:src="@{/js/studentgrades.js}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

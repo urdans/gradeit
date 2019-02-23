@@ -26,7 +26,7 @@ public class IndexController {
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String logIn(HttpServletRequest request) {
+    public String logIn(HttpServletRequest request, Model model) {
         /* if the session contains information about a logged user, redirect to /Student, /teacher or /registrar
          accordingly, otherwise render the log in page */
         if (userSession.decodeSession(request)) {
@@ -37,7 +37,8 @@ public class IndexController {
             if (userSession.isRegistrar())
                 return "redirect:/registrar/students"; //home for registrar users
         }
-        return "login";
+        model.addAttribute("title", "GradeIt-Login");
+        return "index/login";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -54,12 +55,14 @@ public class IndexController {
                 return "redirect:/registrar/students";
         }
         model.addAttribute("errormsg", "Ivalid combination user/password. Please try again");
-        return "login";
+        model.addAttribute("title", "GradeIt-Login");
+        return "index/login";
     }
 
     @RequestMapping(value = "register", method = RequestMethod.GET)
     public String register(Model model) {
-        return "register";
+        model.addAttribute("title", "GradeIt-Register");
+        return "index/register";
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
@@ -90,7 +93,11 @@ public class IndexController {
                 return register(model);
             }
             if (userRegistration.registerNewUser(username, password1)) {
-                return "registrationdone";
+                /*Info if mail confirmationis implemented, change the folloging lines*/
+                //model.addAttribute("title", "GradeIt-Registration done");
+                //return "index/registrationdone";
+                model.addAttribute("title", "GradeIt-Registration confirmed");
+                return "index/registrationconfirmed";
             }
             model.addAttribute("errormsg", "Something went wrong");
             return register(model);
@@ -102,7 +109,7 @@ public class IndexController {
 
     /*info implement after MVP*/
     @RequestMapping(value = "registrationconfirmation", method = RequestMethod.GET)
-    public String registrationConfirmed(HttpServletRequest request) {
+    public String registrationConfirmed(HttpServletRequest request, Model model) {
         //if the token (registrationconfirmation?token=123456ABCD&email=urdans@gmail.com&userid=49&usertype=1) is
         // correct return this page. otherwise redirect to register
         String token = request.getParameter("token");
@@ -110,7 +117,8 @@ public class IndexController {
         String userid = request.getParameter("userid");
         String usertype = request.getParameter("usertype");
         if (token.equals("123456ABCD") & email.equals("urdans@gmail.com") & userid.equals("49") & usertype.equals("1")) {
-            return "registrationconfirmed";
+            model.addAttribute("title", "GradeIt-Registration confirmed");
+            return "index/registrationconfirmed";
         }
         return "redirect:register";
     }

@@ -51,4 +51,7 @@ public interface StudentDao extends CrudRepository<Student, Integer> {
     List<IStudentIdAndName> getGroupingStudents(int groupingId);
 
     Student findFirstByUserName(String userName);
+
+    @Query(value = "SELECT group_id FROM student WHERE id = ?1", nativeQuery = true)
+    int findGroupIdById(int studentId);
 }
