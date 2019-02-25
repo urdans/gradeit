@@ -21,9 +21,6 @@ public class UserProfileForm {
 	@Size(min=2, message = "User name size must be >= 2")
     private String userName;
 
-/*	@Size(min=2, message = "Password size must be >= 1")
-	private String currentPassword;*/
-
     @Size(min=1, message = "Password size must be >= 1")
     private String password;
 

@@ -103,10 +103,7 @@ public class RestAPIController {
 		Subject subject = subjectDao.findById(subjectToDelete.getId()).orElse(null);
 
 		if (subject == null) return false;
-		/*todo
-		 * what if this subject is referenced by the "grouping" table? Test this later
-		 * same concept applies to all the deletions, students and teachers, etc.
-		 * */
+
 		try {
 			subjectDao.delete(subject);
 		} catch (Exception e) {
@@ -151,10 +148,7 @@ public class RestAPIController {
 		Group group = groupDao.findById(groupToDelete.getId()).orElse(null);
 
 		if (group == null) return new MessageContainer("Group not found!", true);
-		/*todo
-		 * what if this group is referenced by the "student" and "grouping" tables?
-		 * Implement this pattern to other delete functions like students and teachers, etc.
-		 * */
+
 		try {
 			groupDao.delete(group);
 		} catch (Exception e) {
@@ -283,8 +277,6 @@ public class RestAPIController {
 		}
 		return new MessageContainer("Evaluation removed!", false);
 	}
-	/*todo
-	 * show message in js needs to be revised since it's getting rid of the spam enclosing element*/
 
 	@GetMapping("/api/getgrades")
 	public GradesForm getStudentGrades(@RequestParam(value = "groupingid", defaultValue = "0") int groupingId,

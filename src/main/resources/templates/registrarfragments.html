@@ -14,11 +14,14 @@
     <nav th:fragment="nav" id="nav1" class="nav nav-pills navbar bg-dark">
         <div class="container-fluid">
             <div class="btn-group">
-                <a class="btn btn-primary" href="/student/grades">Grades</a>
+                <a class="btn btn-primary" href="/registrar/students">Students</a>
+                <a class="btn btn-primary" href="/registrar/teachers">Teachers</a>
+                <a class="btn btn-primary" href="/registrar/subjects">Subjects</a>
+                <a class="btn btn-primary" href="/registrar/groups">Groups</a>
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" th:text="${username}"></button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/student/profile">Profile</a>
+                        <a class="dropdown-item" href="/registrar/profile">Profile</a>
                         <a class="dropdown-item" href="/logout">Log out</a>
                     </div>
                 </div>
@@ -29,10 +32,10 @@
         </div>
     </nav>
 
-    <div th:fragment="msg" th:if="${msg}" class="pb-2">
+    <div th:fragment="errormsg" th:if="${errormsg}" class="pb-2">
         <div class="alert alert-danger alert-dismissible my-2 ">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <span th:text="${msg}" th:class="Error">Default error message</span>
+            <span th:text="${errormsg}" th:class="Error">Default error message</span>
         </div>
     </div>
 </body>

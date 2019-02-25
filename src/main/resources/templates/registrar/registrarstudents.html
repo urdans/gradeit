@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:replace="registrarfragments :: head"></head>
+
+<body class="clgray">
+    <div class="container-fluid">
+        <nav th:replace="registrarfragments :: nav"></nav>
+        <div class="container-fluid mt-4 bg-white">
+            <div class="row">
+                <div class="col-sm-8 ct2 text-center">
+                    <h1>Student List</h1>
+                </div>
+                <div class="col-sm-4 mt-2">
+                    Showing:
+                    <form method="post" th:object="${groupForm}" id="groupForm">
+                        <select th:field="*{groupId}" class="container-fluid form-control">
+                            <option value="0">All groups</option>
+                            <option th:each="group : *{groups}" th:value="${group.id}"
+                                    th:text="${group.name}"></option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover nav-pills mt-4">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>Group</th>
+                            <th>Active</th>
+                            <th>Confirmed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tr th:each="student : ${students}">
+                        <td th:text="${student.lastName}"></td>
+                        <td th:text="${student.firstName}"></td>
+                        <td th:text="${student.email}"></td>
+                        <td th:text="${student.group} ? ${student.group.name} : ''"></span></td>
+                        <td th:text="${student.active} ? 'Yes' : 'No'"></td>
+                        <td th:text="${student.confirmed} ? 'Yes' : 'No'"></td>
+                        <td><a th:href="@{'/registrar/student/edit?id=' + ${student.id}}">View/Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/registrar/student/add">Add</a></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("groupId").onchange = function (){
+            document.getElementById("groupForm").submit()};
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

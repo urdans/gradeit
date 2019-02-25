@@ -9,6 +9,13 @@ function setup() {
     setUpTitle();
 }
 
+function clearActive(e){
+	if(e.target.getAttribute("class").includes("active")) return;
+    //clears active value
+    forEachIdTag("studentId-", function(element){ element.setAttribute("class","text-left nav-link"); });
+	e.target.setAttribute("class","text-left nav-link active");
+}
+
 function updatePage(e) {
     document.getElementById("groupSubjectPairForm").submit();
 }
@@ -20,6 +27,7 @@ function setUpTitle() {
 }
 
 function editEvaluations(e) {
+    clearActive(e);
     var groupingId = document.getElementById("selectedPair").selectedOptions[0].value;
     var studentId = extractIdNumber(e.target.id);
     callApi('GET', 'http://localhost:8080/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
@@ -33,13 +41,16 @@ function editEvaluations(e) {
                 row.insertCell(0).innerText = getJavaDate(dataReturned.grades[i].date);
                 row.insertCell(1).innerText = dataReturned.grades[i].description;
                 var percentage = parseFloat(dataReturned.grades[i].percentage);
-                row.insertCell(2).innerText =  percentage + '%';
+                var cell = row.insertCell(2);
+                cell.setAttribute("class", "text-right");
+                cell.innerText =  percentage + '%';
+
                 var gradeValue = "";
                 if(dataReturned.grades[i].gradeValue != null) gradeValue = parseFloat(dataReturned.grades[i].gradeValue);
                 var gradeId = '0';
                 if(dataReturned.grades[i].gradeId != null) gradeId = dataReturned.grades[i].gradeId;
                 var scheduleId = dataReturned.grades[i].scheduleId;
-                row.insertCell(3).innerHTML = '<input id="gradeId-' + gradeId + '" type="number" value="' + gradeValue + '" data-scheduleId="' + scheduleId + '"></input>';
+                row.insertCell(3).innerHTML = '<input id="gradeId-' + gradeId + '" type="number" class="form-control cellw text-center" value="' + gradeValue + '" data-scheduleId="' + scheduleId + '"></input>';
                 cum = cum + gradeValue*percentage*0.01;
                 totalperc = totalperc + percentage;
             }
@@ -98,6 +109,7 @@ function closeForm() {
     setUpEditForm(false);
     var table = document.getElementById("grades-table");
     while(table.rows.length > 2) table.deleteRow(1);
+    forEachIdTag("studentId-", function(element){ element.setAttribute("class","text-left nav-link"); });
 }
 
 function setUpEditForm(active) {

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:replace="teacherfragments :: head"></head>
+
+<body class="clgray">
+    <div class="container-fluid">
+        <nav th:replace="teacherfragments :: nav"></nav>
+        <div class="container-fluid mt-4 bg-white">
+            <div class="row">
+                <div class="col-sm-8 ct2 text-center">
+                    <h1 id="roster-title">`</h1>
+                </div>
+                <div class="col-sm-4 mt-2">
+                    Showing:
+                    <form method="post" id="groupSubjectPairForm" th:object="${groupSubjectPairForm}" >
+                        <select th:field="*{selectedPair}" class="container-fluid form-control">
+                            <option th:each="pair : *{pairs}" th:value="${pair.groupingId}"
+                                    th:text="${pair.groupName} + ' - ' + ${pair.subjectName}"></option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover nav-pills mt-4" id="schedule-table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th class="text-right">%</th>
+                            <th class="text-right"></th>
+                            <th class="text-right"></th>
+                        </tr>
+                    </thead>
+                    <tr th:each="schedule : ${schedules}" th:id="'rowid-' + ${schedule.id}">
+                        <td th:text="${schedule.description}"></td>
+                        <td th:text="${#calendars.format(schedule.date,'MM/dd/yyyy')}"></td>
+                        <td th:text="${schedule.percentage} + '%'" class="text-right"></td>
+                        <td class="text-right"><a th:id="'editId-' + ${schedule.id}" href="#">Edit</a>
+                        <td class="text-right"><a th:id="'deleteId-' + ${schedule.id}" href="#">Delete</a>
+                    </tr>
+                    <tr th:each="student : ${studentlist}" th:id="'rowid-' + ${student.studentId}">
+                        <td>
+                            <a th:text="${student.studentName}" href="#" th:id="'studentId-'+${student.studentId}"
+                               class="text-left nav-link"></a>
+                        </td>
+                        <td th:each="eval : ${student.gradeEvalPairs}" th:text="${eval.gradeValue} !=null ? ${eval.gradeValue}: '-'"
+                            th:id="'gradeId:'+${eval.gradeId}+'-scheduleId:'+${eval.scheduleId}" class="text-right">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="text-right">Total</td>
+                        <td id="total" class="text-right">0%</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><a id="a-link-add" href="#">Add</a></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <div class="alert alert-danger alert-dismissible my-2" id="under-table-msg" hidden>
+                </div>
+            </div>
+            <div class="container-fluid bg-white">
+                <div class="col-sm-3 bg-white" id="edit-form" hidden>
+                    <h3 id="edit-form-title" class="text-center mb-4">Adding a new evaluation</h3>
+                    <div class="form-group row">
+                        <label for="description-box" class="col-form-label col-sm-5">Description:</label>
+                        <div class="col-sm-7">
+                            <input id="description-box" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="date-box" class="col-form-label col-sm-5">Date:</label>
+                        <div class="col-sm-7">
+                            <input id="date-box" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="percentage-box" class="col-form-label col-sm-5">Percentage (%):</label>
+                        <div class="col-sm-7">
+                            <input id="percentage-box" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <div class="py-2">
+                        <button id="action-button" class="btn btn-primary">Add</button>
+                        <button id="close-button" class="btn btn-primary">Close</button>
+                    </div>
+                    <div id="edit-msg" class="alert alert-danger alert-dismissible my-2" hidden>
+                    </div>
+                </div>
+                <div class="col-sm-9 bg-white"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/js/teacherschedule.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

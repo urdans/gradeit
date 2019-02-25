@@ -11,7 +11,7 @@ import java.util.List;
 @Transactional
 public interface TeacherDao extends CrudRepository<Teacher, Integer> {
 
-    @Query(value="SELECT COUNT(ID) FROM STUDENT WHERE EMAIL =?1 AND EMAIL <>''", nativeQuery = true)
+    @Query(value="SELECT COUNT(ID) FROM TEACHER WHERE EMAIL =?1 AND EMAIL <>''", nativeQuery = true)
     int countAllByEmail(String aEmail);
 
     @Query(value = "SELECT * FROM TEACHER WHERE ACTIVE", nativeQuery = true)

@@ -1,59 +1,28 @@
-/* 
-function clearActive(e){
-	if(e.target.getAttribute("class").includes("active")){
-		return;
-	}
-	//clears active value
-	var nav1Children = document.getElementById("nav1").children;
-	for(i=0; i<nav1Children.length; i++){
-		if(nav1Children[i].tagName == "A"){
-			if(!nav1.children[i].getAttribute("class").includes("disabled")){
-				nav1Children[i].setAttribute("class","nav-link");
-			}
-		}
-	}
-	//sets active value
-	e.target.setAttribute("class","nav-link active");
-}
-
-function selectSubject(e){
- 	if(e.target.getAttribute("class").includes("active")){
-		return; //has clicked on an active item
-	}
-	
-	//clears active value
-	for(i=1;i<15;i++){
-		var el = document.getElementById("d"+i);
-		if(el==null) break;
-		el.setAttribute("class","btn btn-link nav-link");
-	} 
-	
-	//sets active value
-	e.target.setAttribute("class","btn btn-link nav-link active");
-	var subjectid=e.target.getAttribute("data-subjectid");
-	console.log(subjectid);
-	//usar ajax para pedir los datos de evaluacion del alumno usando el subjectid (no es el mejor nombre).
-	//
-}
- */
-
-
-
+ 
 document.onload = setup();
-
 
 function setup() {
     forEachIdTag("groupingId-", function(element){ element.onclick = showDetails; })
 }
 
+function clearActive(e){
+	if(e.target.getAttribute("class").includes("active")) return;
+    //clears active value
+    forEachIdTag("groupingId-", function(element){ element.setAttribute("class","text-left nav-link"); });
+	e.target.setAttribute("class","text-left nav-link active");
+}
+
 function showDetails(e) {
-	setUpEditForm(false);
+    // setUpEditForm(false);
+    document.getElementById("student-grades-form").hidden = false;
+    clearActive(e);
 	var groupingId = extractIdNumber(e.target.id);
 	var studentId = parseInt(document.getElementById('sid').getAttribute("data-sid"));
 	var subjectName = document.getElementById("groupingId-" + groupingId).innerText;
     callApi('GET', 'http://localhost:8080/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
         if(dataReturned) {
             var table = document.getElementById("grades-table");
+            while(table.rows.length > 2) table.deleteRow(1);
             var L = dataReturned.grades.length;
             var cum = 0.0;
             var totalperc = 0;
@@ -75,13 +44,13 @@ function showDetails(e) {
 			document.getElementById("detail-subjectname").innerText = subjectName + " Evaluation Plan";
             document.getElementById("totalperc").innerText = totalperc + "%";
             document.getElementById("cum").innerText = Number.parseFloat(cum).toFixed(1);
-			setUpEditForm(true);
+			// setUpEditForm(true);
         }
     });
 }
 
 function setUpEditForm(active) {
-	document.getElementById("student-grades-form").hidden = !active;
+    if (active) document.getElementById("student-grades-form").hidden = !active;
 	if (!active) {
 		var table = document.getElementById("grades-table");
 		while(table.rows.length > 2) table.deleteRow(1);

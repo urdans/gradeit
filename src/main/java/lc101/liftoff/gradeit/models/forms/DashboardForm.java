@@ -38,7 +38,6 @@ public class DashboardForm {
 		int groupId = studentDao.findGroupIdById(studentId);
 		List<Grouping> groupingList = groupingDao.findAllByGroupId(groupId);
 		for (Grouping grouping : groupingList) {
-//			System.out.println(grouping.getId() + "\t" + grouping.getGroup().getId() + "\t" + grouping.getSubject().getName() + "\t" + grouping.getTeacher().getId());
 			Date lastEval = null;
 			String description = null;
 			double percentage = 0;

@@ -56,9 +56,18 @@ function addEvaluation(e) {
                 row.setAttribute("id","rowid-" + dataReturned.id);
                 row.insertCell(0).innerText = description;
                 row.insertCell(1).innerText = getJavaDate(date);
-                row.insertCell(2).innerText = percentage + '%';
-                row.insertCell(3).innerHTML = '<a id="editId-' + dataReturned.id + '" href="#" hidden>Edit</a>';
-                row.insertCell(4).innerHTML = '<a id="deleteId-' + dataReturned.id + '" href="#" hidden>Delete</a>';
+
+                var cell = row.insertCell(2);
+                cell.setAttribute("class","text-right");
+                cell.innerText = percentage + '%';
+
+                var cell = row.insertCell(3);
+                cell.setAttribute("class","text-right");
+                cell.innerHTML = '<a id="editId-' + dataReturned.id + '">Edit</a>';
+                
+                var cell = row.insertCell(4);
+                cell.setAttribute("class","text-right");
+                cell.innerHTML = '<a id="deleteId-' + dataReturned.id + '">Delete</a>';
                 document.getElementById("editId-" + dataReturned.id).onclick = editSchedule;
                 document.getElementById("deleteId-" + dataReturned.id).onclick = deleteSchedule;
                 clearBoxes();
@@ -118,7 +127,7 @@ function editSchedule(e) {
 
 function deleteSchedule(e) {
     var scheduleId = extractIdNumber(e.target.id);
-    console.log("scheduleId: " + scheduleId);
+    // console.log("scheduleId: " + scheduleId);
     callApi('DELETE', 'http://localhost:8080/api/deleteevaluation', function (dataReturned) {
         showMessage("under-table-msg", dataReturned.message);
         if(!dataReturned.isError) {
@@ -135,8 +144,25 @@ function editFormClose() {
 
 function setUpEditForm(active) {
     grayer("groupSubjectPairForm", active);
-    forEachIdTag("editId-", function(element){ element.hidden = active; })
-    forEachIdTag("deleteId-", function(element){ element.hidden = active; })
+    if (active) {
+        forEachIdTag("editId-", function(element) {
+            // element.hidden = active;
+            element.removeAttribute("href");
+        });
+
+        forEachIdTag("deleteId-", function(element) {
+            // element.hidden = active; 
+            element.removeAttribute("href");
+        });
+    }else{
+        forEachIdTag("editId-", function(element) {
+            element.setAttribute("href","#");
+        });
+
+        forEachIdTag("deleteId-", function(element) {
+            element.setAttribute("href","#");
+        });
+    }
     document.getElementById("a-link-add").hidden = active;
     document.getElementById("edit-form").hidden = !active;
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:replace="registrarfragments :: head"></head>
+
+<body class="clgray">
+    <div class="container-fluid">
+        <nav th:replace="registrarfragments :: nav"></nav>
+        <div class="container-fluid mt-4 bg-white">
+            <div class="row">
+                <div class="col-sm-8 ct2 text-center">
+                    <h1>Teacher List</h1>
+                </div>
+                <div class="col-sm-4 mt-2"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover nav-pills mt-4">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>Active</th>
+                            <th>Confirmed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tr th:each="teacher : ${teachers}">
+                        <td th:text="${teacher.lastName}"></td>
+                        <td th:text="${teacher.firstName}"></td>
+                        <td th:text="${teacher.email}"></td>
+                        <td th:text="${teacher.active} ? 'Yes' : 'No'"></td>
+                        <td th:text="${teacher.confirmed} ? 'Yes' : 'No'"></td>
+                        <td><a th:href="@{'/registrar/teacher/edit?id=' + ${teacher.id}}">View/Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="/registrar/teacher/add">Add</a></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

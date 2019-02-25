@@ -117,12 +117,16 @@ function cancelAddEdit() {
 function editFormShow(state) {
     var addLink = document.getElementById('a-link-add');
     var editForm = document.getElementById('edit-form');
-
     editForm.hidden = !state;
     addLink.hidden = !editForm.hidden;
-
-    forEachEdit(function(element){ element.hidden = !editForm.hidden; })
-    forEachDelete(function(element){ element.hidden = !editForm.hidden; })
+    
+    if (state) {
+        forEachEdit(function(element){ element.removeAttribute("href"); })
+        forEachDelete(function(element){ element.removeAttribute("href"); })
+    }else{
+        forEachEdit(function(element){ element.setAttribute("href","#"); })
+        forEachDelete(function(element){ element.setAttribute("href","#"); })
+    }
 }
 
 function forEachEdit(doForEach){

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:replace="registrarfragments :: head"></head>
+
+<body class="clgray">
+	<div class="container-fluid">
+		<nav th:replace="registrarfragments :: nav"></nav>
+		<div class="container-fluid mt-4 bg-white">
+			<div class="row">
+				<div class="col-sm-8 ct2 text-center">
+					<h1>Group Assignment</h1>
+				</div>
+				<div class="col-sm-4 mt-2">
+					Showing:
+					<form method="post" id="groupForm" th:object="${groupForm}">
+						<select th:field="*{groupId}" class="container-fluid form-control">
+							<option th:each="group : *{groups}" th:value="${group.id}" th:text="${group.name}"></option>
+						</select>
+					</form>
+					<div id="group-option-menu">
+						<small>You can also <a id="add-group" href="#">Add</a>, <a id="edit-group" href="#">Edit</a> or <a id="delete-group" href="#">
+							Delete</a>	the
+							selected
+							group</small>
+					</div>
+					<div id="delete-group-msg" class="alert alert-danger alert-dismissible py-0" hidden>delete group error	msg</div>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table id="grouping-table" class="table table-hover nav-pills mt-4">
+					<thead class="thead-light">
+						<tr>
+							<th>Subject</th>
+							<th>Teacher</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="grouping-list">
+						<tr th:each="group : ${grouping}" th:id="'rowid-' + ${group.id}">
+							<td th:text="${group.subject.name}"></td>
+							<td th:text="${group.teacher.firstName} + ' ' +  ${group.teacher.lastName}"></td>
+							<td><a th:id="'removeId-' + ${group.id}" href="#">Remove</a>
+						</tr>
+						<tr>
+							<td><a id="a-link-add" href="#">Add</a></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="container-fluid bg-white">
+				<div id="group-form" class="col-sm-3 bg-white" hidden>
+					<h3 id="group-form-title" class="text-center mb-4">Adding a new group</h3>
+					<div class="form-group row">
+						<label for="group-name-box" class="col-form-label col-sm-5">Name:</label>
+						<div class="col-sm-7">
+							<input id="group-name-box" type="text" class="form-control">
+						</div>
+					</div>
+					<div class="py-2">
+						<button id="action-button" class="btn btn-primary">Add</button>
+						<button id="group-cancel-button" class="btn btn-primary">Close</button>
+					</div>
+					<div id="group-msg" class="alert alert-danger alert-dismissible my-2 py-0" hidden>adding group error msg</div>
+				</div>
+			</div>
+			<div class="container-fluid bg-white">
+				<div id="add-form" class="col-sm-4 bg-white" hidden>
+					<h3 class="text-center mb-4">Pairing subjects to teachers</h3>
+					<div class="row">
+						<div class="col-sm-6">
+							Subject:
+							<select th:id="subjects" class="container-fluid form-control">
+								<option value="0">Select one</option>
+								<option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.name}"></option>
+							</select>
+						</div>
+						<div class="col-sm-6">
+							Teacher:
+							<select th:id="teachers" class="container-fluid form-control">
+								<option value="0">Select one</option>
+								<option th:each="teacher : ${teachers}" th:value="${teacher.id}"
+										th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="py-2">
+						<button id="addgrouping-button" class="btn btn-primary">Add</button>
+						<button id="cancelgrouping-button" class="btn btn-primary">Close</button>
+					</div>
+					<div id="grouping-msg" class="alert alert-danger alert-dismissible my-2 py-0" hidden>pairing error msg</div>
+				</div>
+				<div class="col-sm-8 bg-white"></div>
+			</div>
+			<div id="outer-grouping-msg" class="alert alert-danger alert-dismissible my-2" hidden>botton page error msg</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/registrargroups.js}"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

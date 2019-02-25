@@ -1,4 +1,0 @@
-Todo:
-teachers/roster
-Show a message when there is no grouping (group-subject pair) to show.
-Same for teacher/schedules

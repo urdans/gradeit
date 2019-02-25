@@ -137,32 +137,31 @@ function groupingCancel() {
 }
 
 function setUpGroupForm(active) {
-/*     if(active){
-        document.getElementById("group-form").style.visibility = "";
+    if(active){
         document.getElementById("group-option-menu").style.visibility = "hidden";
-        grayer("groupForm", active);
-        forEachRemove(function(element){ element.style.visibility = "hidden"; })  
-        document.getElementById("a-link-add").style.visibility = "hidden";
+        forEachRemove(function(element){ element.removeAttribute("href"); })  
     }
     else {
-        document.getElementById("group-form").style.visibility = "hidden";
         document.getElementById("group-option-menu").style.visibility = "";
-        grayer("groupForm", active);
-        forEachRemove(function(element){ element.style.visibility = ""; })  
-        document.getElementById("a-link-add").style.visibility = "";
-    } */
+        forEachRemove(function(element){ element.setAttribute("href","#"); })
+    }
+
     document.getElementById("group-form").hidden = !active;
-    document.getElementById("group-option-menu").hidden = active;
     grayer("groupForm", active);
-    forEachRemove(function(element){ element.hidden = active; })  
     document.getElementById("a-link-add").hidden = active;  
 }
 
 function setUpGroupingForm(active) {
     document.getElementById("add-form").hidden = !active;
-    document.getElementById("group-option-menu").hidden = active;
+    // document.getElementById("group-option-menu").hidden = active;
     grayer("groupForm", active);
-    forEachRemove(function(element){ element.hidden = active; })  
+    if (active) {
+        document.getElementById("group-option-menu").style.visibility = "hidden";
+        forEachRemove(function(element){ element.removeAttribute("href"); });
+    }else{
+        document.getElementById("group-option-menu").style.visibility = "";
+        forEachRemove(function(element){ element.setAttribute("href","#"); })
+    }
     document.getElementById("a-link-add").hidden = active; 
 }
 

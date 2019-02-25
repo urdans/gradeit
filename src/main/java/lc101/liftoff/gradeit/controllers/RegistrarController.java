@@ -71,7 +71,8 @@ public class RegistrarController {
 
         model.addAttribute("students", filteredStudentList);
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarstudents";
+        model.addAttribute("title", "GradeIt-students");
+        return "registrar/registrarstudents";
     }
 
     @RequestMapping(value = "students", method = RequestMethod.POST)
@@ -88,7 +89,8 @@ public class RegistrarController {
         groupForm.setGroups(groupDao.findAll()); //will always suggest the first group in the first request
         model.addAttribute(new Student());
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarstudentedit";
+        model.addAttribute("title", "GradeIt-add student");
+        return "registrar/registrarstudentedit";
     }
 
     @RequestMapping(value = "student/add", method = RequestMethod.POST)
@@ -99,32 +101,43 @@ public class RegistrarController {
 
         groupForm.setGroups(groupDao.findAll());
         model.addAttribute("username", userSession.getSessionUserName(request));
+        model.addAttribute("title", "GradeIt-add student");
 
-        if (errors.hasErrors()) return "registrarstudentedit";
+        if (!userRegistration.emailGrammarIsOk(newStudent.getEmail())) {
+            errors.rejectValue("email", "2", "Invalid email address. Please try again!");
+        }
 
-        if (studentDao.countAllByEmail(newStudent.getEmail()) >= 1) {
+        if (errors.hasErrors()) return "registrar/registrarstudentedit";
+
+        if (studentDao.countAllByEmail(newStudent.getEmail()) >= 1 ||
+                teacherDao.countAllByEmail(newStudent.getEmail()) >= 1) {
             model.addAttribute("errormsg", "This email address is already registered!. Student was not added.");
-            return "registrarstudentedit";
+            return "registrar/registrarstudentedit";
+        }
+        if (!userRegistration.emailGrammarIsOk(newStudent.getEmail())) {
+            errors.rejectValue("email", "2", "Invalid email address. Please try again!");
         }
 
         Group group = groupDao.findById(groupForm.getGroupId()).orElse(null);
         newStudent.setGroup(group);
         studentDao.save(newStudent);
         model.addAttribute(new Student());
-        return "registrarstudentedit";
+        return "registrar/registrarstudentedit";
     }
 
     @RequestMapping(value = "student/edit", method = RequestMethod.GET)
-    public String registrarStudentEdit(Model model, HttpServletRequest request, @RequestParam int id) {
+    public String registrarStudentEdit(Model model, HttpServletRequest request, @RequestParam(value = "id", required = false, defaultValue = "0") int id) {
 
         if (!registrarLoggedIn(request)) return "redirect:/";
-        /*todo what if id is omitted in student/edit?id=i ? whitelabel error. Need to capture.*/
+
+        if (id == 0) return "redirect:/registrar/students";
 
         Student studentToEdit = studentDao.findById(id).orElse(null);
 
         if (studentToEdit == null) return "redirect:/registrar/students";
 
         int groupId;
+
         if (studentToEdit.getGroup() == null)
             groupId = 0;
         else
@@ -135,7 +148,8 @@ public class RegistrarController {
         model.addAttribute("groupForm", groupForm);
         model.addAttribute(studentToEdit);
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarstudentedit";
+        model.addAttribute("title", "GradeIt-edit student");
+        return "registrar/registrarstudentedit";
     }
 
     @RequestMapping(value = "student/edit/update", method = RequestMethod.POST)
@@ -147,8 +161,12 @@ public class RegistrarController {
         groupForm.setGroups(groupDao.findAll());
         model.addAttribute("username", userSession.getSessionUserName(request));
         model.addAttribute("editmode", "1"); //adding this attribute means it's "editing mode"
+        model.addAttribute("title", "GradeIt-edit student");
 
-        if (errors.hasErrors()) return "registrarstudentedit";
+        if (!userRegistration.emailGrammarIsOk(editedStudent.getEmail())) {
+            errors.rejectValue("email", "2", "Invalid email address. Please try again!");
+        }
+        if (errors.hasErrors()) return "registrar/registrarstudentedit";
 
         Student studentToUpdate = studentDao.findById(editedStudent.getId()).orElse(null);
 
@@ -156,10 +174,11 @@ public class RegistrarController {
 
             if (!studentToUpdate.isConfirmed()) {
                 if (!studentToUpdate.getEmail().equals(editedStudent.getEmail())) {
-                    if (studentDao.countAllByEmail(editedStudent.getEmail()) >= 1) {
-                        model.addAttribute("errormsg", "This email address is already registered!. " +
+                    if (studentDao.countAllByEmail(editedStudent.getEmail()) >= 1 ||
+                            teacherDao.countAllByEmail(editedStudent.getEmail()) >= 1) {
+                        model.addAttribute("errormsg", "This email address is already registered! " +
                                 "Student was not added.");
-                        return "registrarstudentedit";
+                        return "registrar/registrarstudentedit";
                     }
                 }
                 studentToUpdate.setEmail(editedStudent.getEmail());
@@ -192,7 +211,8 @@ public class RegistrarController {
         teacherList = teacherDao.findAllByOrderByLastName();
         model.addAttribute("teachers", teacherList);
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarteachers";
+        model.addAttribute("title", "GradeIt-teachers");
+        return "registrar/registrarteachers";
     }
 
     @RequestMapping(value = "teacher/add", method = RequestMethod.GET)
@@ -203,7 +223,8 @@ public class RegistrarController {
         //omitting "editmode" attribute means this is on "add mode"
         model.addAttribute(new Teacher());
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarteacheredit";
+        model.addAttribute("title", "GradeIt-add teacher");
+        return "registrar/registrarteacheredit";
     }
 
     @RequestMapping(value = "teacher/add", method = RequestMethod.POST)
@@ -212,24 +233,31 @@ public class RegistrarController {
 
         if (!registrarLoggedIn(request)) return "redirect:/";
         model.addAttribute("username", userSession.getSessionUserName(request));
+        model.addAttribute("title", "GradeIt-add teacher");
 
-        if (errors.hasErrors()) return "registrarteacheredit";
+        if (!userRegistration.emailGrammarIsOk(newTeacher.getEmail())) {
+            errors.rejectValue("email", "2", "Invalid email address. Please try again!");
+        }
 
-        if (teacherDao.countAllByEmail(newTeacher.getEmail()) >= 1) {
+        if (errors.hasErrors()) return "registrar/registrarteacheredit";
+
+        if (teacherDao.countAllByEmail(newTeacher.getEmail()) >= 1 ||
+                studentDao.countAllByEmail(newTeacher.getEmail()) >= 1) {
             model.addAttribute("errormsg", "This email address is already registered!. Teacher was not added.");
-            return "registrarteacheredit";
+            return "registrar/registrarteacheredit";
         }
 
         teacherDao. save(newTeacher);
         model.addAttribute(new Teacher());
-        return "registrarteacheredit";
+        return "registrar/registrarteacheredit";
     }
 
     @RequestMapping(value = "teacher/edit", method = RequestMethod.GET)
-    public String registrarTeacherEdit(Model model, HttpServletRequest request, @RequestParam int id) {
+    public String registrarTeacherEdit(Model model, HttpServletRequest request, @RequestParam(value = "id", required = false, defaultValue = "0") int id) {
 
         if (!registrarLoggedIn(request)) return "redirect:/";
-        /*todo what if id is omitted in student/edit?id=i ? whitelabel error. Need to capture.*/
+
+        if (id == 0) return "redirect:/registrar/teachers";
 
         Teacher teacherToEdit = teacherDao.findById(id).orElse(null);
 
@@ -238,7 +266,8 @@ public class RegistrarController {
         model.addAttribute("editmode", "1"); //adding this attribute means it's "editing mode"
         model.addAttribute(teacherToEdit);
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarteacheredit";
+        model.addAttribute("title", "GradeIt-edit teacher");
+        return "registrar/registrarteacheredit";
     }
 
     @RequestMapping(value = "teacher/edit/update", method = RequestMethod.POST)
@@ -249,8 +278,13 @@ public class RegistrarController {
 
         model.addAttribute("username", userSession.getSessionUserName(request));
         model.addAttribute("editmode", "1"); //adding this attribute means it's "editing mode"
+        model.addAttribute("title", "GradeIt-edit teacher");
 
-        if (errors.hasErrors()) return "registrarteacheredit";
+        if (!userRegistration.emailGrammarIsOk(editedTeacher.getEmail())) {
+            errors.rejectValue("email", "2", "Invalid email address. Please try again!");
+        }
+
+        if (errors.hasErrors()) return "registrar/registrarteacheredit";
 
         Teacher teacherToUpdate = teacherDao.findById(editedTeacher.getId()).orElse(null);
 
@@ -258,10 +292,11 @@ public class RegistrarController {
 
             if (!teacherToUpdate.isConfirmed()) {
                 if (!teacherToUpdate.getEmail().equals(editedTeacher.getEmail())) {
-                    if (studentDao.countAllByEmail(editedTeacher.getEmail()) >= 1) {
-                        model.addAttribute("errormsg", "This email address is already registered!. " +
+                    if (teacherDao.countAllByEmail(editedTeacher.getEmail()) >= 1 ||
+                            studentDao.countAllByEmail(editedTeacher.getEmail()) >= 1) {
+                        model.addAttribute("errormsg", "This email address is already registered! " +
                                 "Teacher was not added.");
-                        return "registrarteacheredit";
+                        return "registrar/registrarteacheredit";
                     }
                 }
                 teacherToUpdate.setEmail(editedTeacher.getEmail());
@@ -284,7 +319,8 @@ public class RegistrarController {
 
         model.addAttribute("username", userSession.getSessionUserName(request));
         model.addAttribute("subjects", subjectDao.findAll());
-        return "registrarsubjects";
+        model.addAttribute("title", "GradeIt-subjects");
+        return "registrar/registrarsubjects";
     }
 
     @RequestMapping(value = "groups", method = RequestMethod.GET)
@@ -303,8 +339,9 @@ public class RegistrarController {
         model.addAttribute("teachers", teacherDao.getActiveTeachers());
         model.addAttribute("subjects", subjectDao.findAll());
         model.addAttribute("username", userSession.getSessionUserName(request));
+        model.addAttribute("title", "GradeIt-groups");
 
-        return "registrargroups";
+        return "registrar/registrargroups";
     }
 
     @RequestMapping(value = "groups", method = RequestMethod.POST)
@@ -350,7 +387,8 @@ public class RegistrarController {
             }
         }
         model.addAttribute("username", userSession.getSessionUserName(request));
-        return "registrarprofile";
+        model.addAttribute("title", "GradeIt-profile");
+        return "registrar/registrarprofile";
     }
 
     @RequestMapping(value = "profile", method = RequestMethod.POST)
@@ -368,13 +406,9 @@ public class RegistrarController {
 
 
     /*todo
-    * put order in the data (order by) when presenting it all over*/
-
-
-    /*todo (keep in mind the reference integrity when deleting). Maybe no need to delete, what is active for?
-     * implement student deletion
-     * implement teacher deletion
+     * put order in the data (order by) when presenting it all over
      */
+
 
     /*todo
      * if a student or a teacher is singning in and he is not active, he wont be able to sign in.

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+
+<head th:replace="registrarfragments :: head"></head>
+
+<body class="clgray">
+<div class="container-fluid">
+    <nav th:replace="registrarfragments :: nav"></nav>
+    <div class="container-fluid mt-4 bg-white">
+        <div class="container align-center">
+            <h1>Registrar Profile</h1>
+            <form method="post" th:object="${userProfileForm}">
+                <div class="form-group">
+                    <label th:for="userName">User name:</label>
+                    <input type="text" class="form-control" th:field="*{userName}">
+                    <div th:errors="*{userName}" class="alert alert-danger py-0 pl-2 msgtext" role="alert">Default error message</div>
+                </div>
+                <div class="form-group">
+                    <label th:for="password">Password:</label>
+                    <input type="password" class="form-control" th:field="*{password}">
+                    <div th:errors="*{password}" class="alert alert-danger py-0 pl-2 msgtext" role="alert">Default error message</div>
+                </div>
+                <div class="form-group">
+                    <label th:for="password2">Retype password:</label>
+                    <input type="password" class="form-control" th:field="*{password2}">
+                    <div th:errors="*{password2}" class="alert alert-danger py-0 pl-2 msgtext" role="alert">Default error message</div>
+                </div>
+                <input type="hidden" th:field="*{id}">
+                <div class="py-2">
+                    <input type="submit" class="btn btn-primary" value="Save">
+                    <input type="button" class="btn btn-primary" onclick="location.href='/registrar/students';" value="Back" />
+                </div>
+            </form>
+        <p th:text="${msg}" th:class="Error">Default error message</p>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

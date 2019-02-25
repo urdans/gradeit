@@ -44,8 +44,6 @@ public class TeacherController {
 	private GradeDao gradeDao;
 
 	/*todo manage all the cases where there is no data yet, especially in the select elements in the html*/
-	/*todo if an teacher or student user is not active, he must not be able to log in*/
-
 
 	public boolean teacherLoggedIn(HttpServletRequest request) {
 		return (userSession.decodeSession(request)) & (userSession.isTeacher());
@@ -63,7 +61,8 @@ public class TeacherController {
 		model.addAttribute("studentlist", new GroupingStudentsForm(
 				studentDao.getGroupingStudents(groupSubjectPairForm.getSelectedPair()), schedules, gradeDao).getStudentIdAndNameList());
 		model.addAttribute("username", userSession.getSessionUserName(request));
-		return "teacherroster";
+		model.addAttribute("title", "GradeIt-roster");
+		return "teacher/teacherroster";
 	}
 
 	@RequestMapping(value = "roster", method = RequestMethod.POST)
@@ -71,9 +70,6 @@ public class TeacherController {
 	                                       @ModelAttribute @Valid GroupSubjectPairForm groupSubjectPairForm) {
 		return teacherRoster(model, request, groupSubjectPairForm);
 	}
-
-	/*todo all buttons to close/cancel should be consistently "Close" for local forms or "Cancel" for forms in other pages (or maybe "Back")
-	 */
 
 	@RequestMapping(value = "schedules", method = RequestMethod.GET)
 	public String teacherSchedules(Model model, HttpServletRequest request,
@@ -85,7 +81,9 @@ public class TeacherController {
 		List<Schedule> schedules = scheduleDao.findAllByGroupingIdOrderByDateAsc(groupSubjectPairForm.getSelectedPair());
 		model.addAttribute("schedules", schedules);
 		model.addAttribute("username", userSession.getSessionUserName(request));
-		return "teacherschedules";
+		model.addAttribute("title", "GradeIt-schedules");
+
+		return "teacher/teacherschedules";
 	}
 
 	@RequestMapping(value = "schedules", method = RequestMethod.POST)
@@ -140,7 +138,8 @@ public class TeacherController {
 			}
 		}
 		model.addAttribute("username", userSession.getSessionUserName(request));
-		return "teacherprofile";
+		model.addAttribute("title", "GradeIt-profile");
+		return "teacher/teacherprofile";
 	}
 
 	@RequestMapping(value = "profile", method = RequestMethod.POST)

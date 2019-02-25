@@ -14,11 +14,12 @@
     <nav th:fragment="nav" id="nav1" class="nav nav-pills navbar bg-dark">
         <div class="container-fluid">
             <div class="btn-group">
-                <a class="btn btn-primary" href="/student/grades">Grades</a>
+                <a class="btn btn-primary" href="/teacher/roster">Roster</a>
+                <a class="btn btn-primary" href="/teacher/schedules">Schedules</a>
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" th:text="${username}"></button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/student/profile">Profile</a>
+                        <a class="dropdown-item" href="/teacher/profile">Profile</a>
                         <a class="dropdown-item" href="/logout">Log out</a>
                     </div>
                 </div>
