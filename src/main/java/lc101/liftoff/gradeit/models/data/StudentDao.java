@@ -12,10 +12,10 @@ import java.util.List;
 @Transactional
 public interface StudentDao extends CrudRepository<Student, Integer> {
 
-    @Query(value = "SELECT * FROM STUDENT WHERE GROUP_ID = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM student WHERE GROUP_ID = ?1", nativeQuery = true)
     List<Student> findAllByGroupId(int groupId);
 
-    @Query(value="SELECT COUNT(ID) FROM STUDENT WHERE EMAIL =?1 AND EMAIL <>''", nativeQuery = true)
+    @Query(value="SELECT COUNT(ID) FROM student WHERE EMAIL =?1 AND EMAIL <>''", nativeQuery = true)
     int countAllByEmail(String aEmail);
 
     Iterable<Student> findAllByGroupIdOrderByLastName(int groupId);
