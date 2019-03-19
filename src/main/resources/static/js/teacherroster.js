@@ -30,7 +30,7 @@ function editEvaluations(e) {
     clearActive(e);
     var groupingId = document.getElementById("selectedPair").selectedOptions[0].value;
     var studentId = extractIdNumber(e.target.id);
-    callApi('GET', 'http://localhost:8080/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
+    callApi('GET', 'https://gradeit19.herokuapp.com/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
         if(dataReturned) {
             var table = document.getElementById("grades-table");
             var L = dataReturned.grades.length;
@@ -97,7 +97,7 @@ function saveGrades() {
         gradeList.push(studentGrade);
     }
     var studentGrades = {"studentId":studentId, "gradeList":gradeList}
-    callApi('POST', 'http://localhost:8080/api/setgrades', function (dataReturned) {
+    callApi('POST', 'https://gradeit19.herokuapp.com/api/setgrades', function (dataReturned) {
         showMessage("student-grades-form-msg", dataReturned.message);
         if(!dataReturned.isError) {
             location.reload();

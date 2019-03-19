@@ -47,7 +47,7 @@ function addEvaluation(e) {
             showMessage("edit-msg", "Percentage must be valid!");
             return;
         }
-        callApi('POST', 'http://localhost:8080/api/addevaluation', function (dataReturned) {
+        callApi('POST', 'https://gradeit19.herokuapp.com/api/addevaluation', function (dataReturned) {
             showMessage("edit-msg", dataReturned.message);
             if(!dataReturned.isError) {
                 //add the new evaluation to the table
@@ -108,7 +108,7 @@ function editSchedule(e) {
             showMessage("edit-msg", "Percentage must be valid!");
             return;
         }
-        callApi('PUT', 'http://localhost:8080/api/updateevaluation', function (dataReturned) {
+        callApi('PUT', 'https://gradeit19.herokuapp.com/api/updateevaluation', function (dataReturned) {
             if(dataReturned.isError) {
                 showMessage("edit-msg", dataReturned.message);
             }else{
@@ -128,7 +128,7 @@ function editSchedule(e) {
 function deleteSchedule(e) {
     var scheduleId = extractIdNumber(e.target.id);
     // console.log("scheduleId: " + scheduleId);
-    callApi('DELETE', 'http://localhost:8080/api/deleteevaluation', function (dataReturned) {
+    callApi('DELETE', 'https://gradeit19.herokuapp.com/api/deleteevaluation', function (dataReturned) {
         showMessage("under-table-msg", dataReturned.message);
         if(!dataReturned.isError) {
             var row = document.getElementById("rowid-" + scheduleId);

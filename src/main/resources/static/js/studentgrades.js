@@ -19,7 +19,7 @@ function showDetails(e) {
 	var groupingId = extractIdNumber(e.target.id);
 	var studentId = parseInt(document.getElementById('sid').getAttribute("data-sid"));
 	var subjectName = document.getElementById("groupingId-" + groupingId).innerText;
-    callApi('GET', 'http://localhost:8080/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
+    callApi('GET', 'https://gradeit19.herokuapp.com/api/getgrades?groupingid=' + groupingId + '&studentid=' + studentId, function (dataReturned) {
         if(dataReturned) {
             var table = document.getElementById("grades-table");
             while(table.rows.length > 2) table.deleteRow(1);

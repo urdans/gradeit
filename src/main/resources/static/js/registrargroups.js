@@ -32,7 +32,7 @@ function addGroup(e) {
             showMessage("group-msg", "Group name can not be empty!");
             return;
         }
-        callApi('POST', 'http://localhost:8080/api/addgroup', function (dataReturned) {
+        callApi('POST', 'https://gradeit19.herokuapp.com/api/addgroup', function (dataReturned) {
             if(dataReturned) {
                 showMessage("group-msg", 'Group name "' + newGroupName + '" added!');
                 var groupSelector = document.getElementById("groupId");
@@ -57,7 +57,7 @@ function editGroup(e) {
             showMessage("group-msg", "Group name can not be empty!");
             return;
         }
-        callApi('PUT', 'http://localhost:8080/api/updategroup', function (dataReturned) {
+        callApi('PUT', 'https://gradeit19.herokuapp.com/api/updategroup', function (dataReturned) {
             if(dataReturned) {
                 showMessage("delete-group-msg", "Group name saved!");
                 var selectedGroup = document.getElementById("groupId").selectedOptions[0];
@@ -73,7 +73,7 @@ function deleteGroup(e) {
     var selectedGroup = document.getElementById("groupId").selectedOptions[0];
     groupName = selectedGroup.innerText;
     groupId = selectedGroup.value;
-    callApi('DELETE', 'http://localhost:8080/api/deletegroup', function (dataReturned) {
+    callApi('DELETE', 'https://gradeit19.herokuapp.com/api/deletegroup', function (dataReturned) {
         showMessage("delete-group-msg", dataReturned.message);
         if(!dataReturned.isError) {
             var groupSelector = document.getElementById("groupId");
@@ -99,7 +99,7 @@ function addGrouping(e) {
         }
         console.log("group id: " + groupId + "    subjectId: " + subjectId + "    teacherId: " + teacherId);
         console.log("Subject: " + subject + "      Teacher: " + teacher);
-        callApi('POST', 'http://localhost:8080/api/addgrouping', function (dataReturned) {
+        callApi('POST', 'https://gradeit19.herokuapp.com/api/addgrouping', function (dataReturned) {
             showMessage("grouping-msg", dataReturned.message);
             if(!dataReturned.isError) {
                 //add the pair to the table
@@ -119,7 +119,7 @@ function addGrouping(e) {
 function removeGrouping(e) {
     groupingIdToDeleteId = parseInt(String(e.target.id).substr(9));
     console.log("groupingIdToDeleteId: " + groupingIdToDeleteId);
-    callApi('DELETE', 'http://localhost:8080/api/deletegrouping', function (dataReturned) {
+    callApi('DELETE', 'https://gradeit19.herokuapp.com/api/deletegrouping', function (dataReturned) {
         showMessage("outer-grouping-msg", dataReturned.message);
         if(!dataReturned.isError) {
             //remove the pair to the table

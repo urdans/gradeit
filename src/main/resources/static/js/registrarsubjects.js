@@ -152,7 +152,7 @@ function forEachDelete(doForEach){
 }
 
 function getSubjectName(id) {
-    callApi('GET', 'http://localhost:8080/api/getsubject?id=' + id, function (dataReturned){
+    callApi('GET', 'https://gradeit19.herokuapp.com/api/getsubject?id=' + id, function (dataReturned){
         if(dataReturned != null) {
             editSubjectContinue(dataReturned);
         }
@@ -160,7 +160,7 @@ function getSubjectName(id) {
 }
 
 function updateSubject(subjectObject) {
-    callApi('PUT', 'http://localhost:8080/api/updatesubject', function (dataReturned){
+    callApi('PUT', 'https://gradeit19.herokuapp.com/api/updatesubject', function (dataReturned){
         if(dataReturned != null) {
             editSubjectEditAfterPost(dataReturned, subjectObject);
         }
@@ -168,7 +168,7 @@ function updateSubject(subjectObject) {
 }
 
 function addNewSubject(subjectObject) {
-    callApi('POST', 'http://localhost:8080/api/addsubject', function (dataReturned){
+    callApi('POST', 'https://gradeit19.herokuapp.com/api/addsubject', function (dataReturned){
         if(dataReturned != null) {
             subjectObject.id = dataReturned;
             editSubjectAddAfterPost(dataReturned, subjectObject);
@@ -177,7 +177,7 @@ function addNewSubject(subjectObject) {
 }
 
 function deleteExistingSubject(subjectObject) {
-    callApi('DELETE', 'http://localhost:8080/api/deletesubject', function (dataReturned){
+    callApi('DELETE', 'https://gradeit19.herokuapp.com/api/deletesubject', function (dataReturned){
         if(dataReturned != null) {
             deleteSubjectAfterPost(dataReturned, subjectObject);
         }
